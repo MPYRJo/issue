@@ -3,6 +3,7 @@ package com.yoong.myissue.domain.issue.entity
 import com.yoong.myissue.domain.issue.enum.Priority
 import com.yoong.myissue.domain.issue.enum.WorkingStatus
 import com.yoong.myissue.domain.member.entity.Member
+import com.yoong.myissue.domain.team.entity.Team
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp

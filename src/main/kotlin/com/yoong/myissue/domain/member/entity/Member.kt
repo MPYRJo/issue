@@ -1,6 +1,7 @@
 package com.yoong.myissue.domain.member.entity
 
 import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.domain.team.entity.Team
 import jakarta.persistence.*
 
 
@@ -21,7 +22,8 @@ class Member (
     @Column(name = "role", nullable = false)
     val role : Role,
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "member")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id", nullable = false)
     val team : Team
 
 ){
