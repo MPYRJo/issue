@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import com.yoong.myissue.domain.comment.dto.*
+import com.yoong.myissue.domain.comment.service.CommentService
 import com.yoong.myissue.infra.dto.UpdateResponse
 
 
@@ -21,12 +22,6 @@ class CommentController(
     ): ResponseEntity<String> {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(createCommentRequest))
-    }
-
-    @GetMapping
-    fun getCommentList(): ResponseEntity<List<CommentResponse>> {
-
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.getCommentList())
     }
 
     @PutMapping("/{commentId}")
