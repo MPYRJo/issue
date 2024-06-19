@@ -2,6 +2,7 @@ package com.yoong.myissue.domain.team.controller
 
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
+import com.yoong.myissue.domain.team.service.TeamService
 import com.yoong.myissue.infra.dto.UpdateResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/team")
-class TeamController {
+class TeamController(
+    private val teamService: TeamService
+) {
 
     @PostMapping
     fun createTeam(
