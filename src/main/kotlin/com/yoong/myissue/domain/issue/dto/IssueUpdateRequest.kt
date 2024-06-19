@@ -1,5 +1,12 @@
 package com.yoong.myissue.domain.issue.dto
 
-class IssueUpdateRequest {
+import com.yoong.myissue.domain.issue.enum.Priority
+import com.yoong.myissue.domain.issue.enum.WorkingStatus
 
-}
+data class IssueUpdateRequest (
+    var title: String?,
+    var description: String?,
+    var priority: Priority?,
+    var workingStatus: WorkingStatus?,
+
+)
