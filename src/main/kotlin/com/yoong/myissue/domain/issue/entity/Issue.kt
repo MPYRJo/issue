@@ -2,6 +2,7 @@ package com.yoong.myissue.domain.issue.entity
 
 import com.yoong.myissue.domain.issue.enum.Priority
 import com.yoong.myissue.domain.issue.enum.WorkingStatus
+import com.yoong.myissue.domain.member.entity.Member
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
@@ -33,7 +34,7 @@ class Issue(
     @JoinColumn(name = "team_id")
     val team: Team,
 
-) {
+    ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id : Long? = null
