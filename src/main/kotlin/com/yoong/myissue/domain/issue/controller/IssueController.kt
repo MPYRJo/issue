@@ -3,7 +3,7 @@ package com.yoong.myissue.domain.issue.controller
 import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
-import com.yoong.myissue.domain.issue.dto.IssueUpdateResponse
+import com.yoong.myissue.infra.dto.UpdateResponse
 import com.yoong.myissue.domain.issue.service.IssueService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -48,7 +48,7 @@ class IssueController(
     fun updateIssue(
         @PathVariable("issueId") issueId: Long,
         @RequestBody issueUpdateRequest : IssueUpdateRequest
-    ): ResponseEntity<IssueUpdateResponse>{
+    ): ResponseEntity<UpdateResponse>{
 
         return ResponseEntity.status(HttpStatus.OK).body(issueService.updateIssue(issueId, issueUpdateRequest))
     }

@@ -1,6 +1,6 @@
-package com.yoong.myissue.domain.issue.dto
+package com.yoong.myissue.infra.dto
 
-data class IssueUpdateResponse(
+data class UpdateResponse(
     val column : String,
     val oldData : String,
     val newData : String,

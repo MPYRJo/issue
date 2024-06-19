@@ -3,7 +3,7 @@ package com.yoong.myissue.domain.issue.service
 import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
-import com.yoong.myissue.domain.issue.dto.IssueUpdateResponse
+import com.yoong.myissue.infra.dto.UpdateResponse
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,7 +24,7 @@ class IssueService {
         TODO("쿼리에 맞는 값이 나왔다면 List 형태로 반환")
     }
 
-    fun updateIssue(issueId: Long, issueUpdateRequest: IssueUpdateRequest): IssueUpdateResponse {
+    fun updateIssue(issueId: Long, issueUpdateRequest: IssueUpdateRequest): UpdateResponse {
         //TODO("이슈 아이디 를 받이서 아이디 가 없는 경우 ModelNotFoundException")
         //TODO("가져온 이슈를 업데이트")
         TODO("이슈 변경 사항을 반환")
