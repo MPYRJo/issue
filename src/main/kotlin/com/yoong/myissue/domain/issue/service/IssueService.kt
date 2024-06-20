@@ -53,19 +53,24 @@ class IssueService(
         return issueList.map { IssueResponse.from(it) }
     }
 
-    fun updateIssue(issueId: Long, issueUpdateRequest: IssueUpdateRequest): UpdateResponse {
+    fun updateIssue(issueId: Long, issueUpdateRequest: IssueUpdateRequest): String {
 
         val issue = issueRepository.findByIdOrNull(issueId) ?: throw ModelNotFoundException("이슈", issueId.toString())
 
         issue.update(issueUpdateRequest)
-        TODO("이슈 변경 사항을 반환")
+
+        val savedData = issueRepository.save(issue)
+
+        return "업데이트 가 완료 되었습니다, 이슈 번호 ${savedData.id}"
     }
 
     fun deleteIssue(issueId: Long): String {
-        //TODO("이슈 아이디 를 받이서 아이디 가 없는 경우 ModelNotFoundException")
-        //TODO("가져온 이슈를 SoftDelete")
+
+        val issue = issueRepository.findByIdOrNull(issueId) ?: throw ModelNotFoundException("이슈", issueId.toString())
+
+        issueRepository.delete(issue)
         //TODO("가져온 이슈를 SpringScheduler 에 의해서 3시간(90일) 이후에 자동 삭제")
-        TODO("삭제 완료 내용을 반환")
+        return "삭제가 완료 되었습니다, 이슈 번호 ${issue.id}"
     }
 
 

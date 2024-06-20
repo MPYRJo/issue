@@ -53,7 +53,7 @@ class IssueController(
     fun updateIssue(
         @PathVariable("issueId") issueId: Long,
         @RequestBody issueUpdateRequest : IssueUpdateRequest
-    ): ResponseEntity<UpdateResponse>{
+    ): ResponseEntity<String>{
 
         return ResponseEntity.status(HttpStatus.OK).body(issueService.updateIssue(issueId, issueUpdateRequest))
     }
