@@ -15,7 +15,7 @@ data class TeamResponse(
             return TeamResponse(
                 id = team.id!!,
                 name = team.name,
-                issue = team.issues.map { IssueResponse.from(it) },
+                issue = team.issues.map { it.toIssueResponse() },
                 member = team.members.map { MemberResponse.from(it) }
             )
         }

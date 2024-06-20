@@ -14,22 +14,7 @@ data class IssueResponse (
     var description: String?,
     var priority: Priority,
     var workingStatus: WorkingStatus,
-    val member: MemberResponse,
-    val team : TeamResponse,
+    val nickname: String,
+    val teamName : String,
     val createdAt: LocalDateTime,
-) {
-    companion object{
-        fun from(issue: Issue): IssueResponse{
-            return IssueResponse(
-                id = issue.id!!,
-                title = issue.title,
-                description = issue.description,
-                priority = issue.priority,
-                workingStatus = issue.workingStatus,
-                member = MemberResponse.from(issue.member),
-                team = TeamResponse.from(issue.team),
-                createdAt = issue.createdAt,
-            )
-        }
-    }
-}
+)

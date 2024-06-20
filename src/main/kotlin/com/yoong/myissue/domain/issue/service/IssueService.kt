@@ -7,7 +7,6 @@ import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.repository.IssueRepository
 import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.exception.`class`.ModelNotFoundException
-import com.yoong.myissue.infra.dto.UpdateResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -35,7 +34,7 @@ class IssueService(
             )
         )
 
-        return "이슈가 등록 되었습니다 이슈 번호 : ${savedIssue.id}"
+        return "이슈가 등록 되었습니다 이슈 번호 : ${savedIssue.getId()}"
     }
 
     @Transactional(readOnly = true)
@@ -43,14 +42,14 @@ class IssueService(
 
         val issue = issueRepository.findByIdOrNull(issueId) ?: throw ModelNotFoundException("이슈", issueId.toString())
 
-        return IssueResponse.from(issue)
+        return issue.toIssueResponse()
     }
 
     fun getIssueList(): List<IssueResponse> {
 
         val issueList = issueRepository.findAll()
 
-        return issueList.map { IssueResponse.from(it) }
+        return issueList.map { it.toIssueResponse() }
     }
 
     fun updateIssue(issueId: Long, issueUpdateRequest: IssueUpdateRequest): String {
@@ -61,7 +60,7 @@ class IssueService(
 
         val savedData = issueRepository.save(issue)
 
-        return "업데이트 가 완료 되었습니다, 이슈 번호 ${savedData.id}"
+        return "업데이트 가 완료 되었습니다, 이슈 번호 ${savedData.getId()}"
     }
 
     fun deleteIssue(issueId: Long): String {
@@ -70,7 +69,7 @@ class IssueService(
 
         issueRepository.delete(issue)
         //TODO("가져온 이슈를 SpringScheduler 에 의해서 3시간(90일) 이후에 자동 삭제")
-        return "삭제가 완료 되었습니다, 이슈 번호 ${issue.id}"
+        return "삭제가 완료 되었습니다, 이슈 번호 ${issue.getId()}"
     }
 
 

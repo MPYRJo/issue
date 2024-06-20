@@ -25,7 +25,7 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ModelNotFoundException::class)
-    fun modelNotFoundException(e: InvalidCredentialException): ResponseEntity<ErrorResponse> {
+    fun modelNotFoundException(e: ModelNotFoundException): ResponseEntity<ErrorResponse> {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse(404, e.message?: "존재 하지 않음"))
 
     }
