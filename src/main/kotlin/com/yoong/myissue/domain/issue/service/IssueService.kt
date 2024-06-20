@@ -3,17 +3,40 @@ package com.yoong.myissue.domain.issue.service
 import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
+import com.yoong.myissue.domain.issue.entity.Issue
+import com.yoong.myissue.domain.issue.repository.IssueRepository
+import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.infra.dto.UpdateResponse
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional
 @Service
-class IssueService {
+class IssueService(
+    private val issueRepository: IssueRepository,
+    private val memberService: ExternalMemberService,
+){
 
-    fun createIssue(issueCreateRequest: IssueCreateRequest): String {
 
-        TODO("이슈 내용을 받아서 저장")
+    fun createIssue(issueCreateRequest: IssueCreateRequest, email: String): String {
+
+        val member = memberService.searchEmail(email)
+
+        val savedIssue = issueRepository.save(
+            Issue(
+                title = issueCreateRequest.title,
+                description = issueCreateRequest.description,
+                priority = issueCreateRequest.priority,
+                workingStatus = issueCreateRequest.workingStatus,
+                member = member,
+                team = member.team,
+            )
+        )
+
+        return "이슈가 등록 되었습니다 이슈 번호 : ${savedIssue.id}"
     }
 
+    @Transactional(readOnly = true)
     fun getIssue(issueId: Long): IssueResponse {
         TODO("이슈 아이디 를 받이서 아이디 가 없는 경우 ModelNotFoundException")
         //TODO(이슈를 조회 해서 반환)

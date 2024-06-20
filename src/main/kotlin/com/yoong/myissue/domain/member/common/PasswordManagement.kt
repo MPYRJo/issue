@@ -10,7 +10,7 @@ class PasswordManagement(
     ) {
 
     fun isSame(password: String, password2: String) {
-        if(password != password2) throw InvalidCredentialException()
+        if(password != password2) throw InvalidCredentialException("비밀번호")
     }
 
     fun encode(password: String): String {

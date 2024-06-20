@@ -8,6 +8,7 @@ import com.yoong.myissue.domain.member.dto.SignupRequest
 import com.yoong.myissue.domain.member.entity.Member
 import com.yoong.myissue.domain.member.repository.MemberRepository
 import com.yoong.myissue.domain.team.entity.Team
+import com.yoong.myissue.domain.team.service.ExternalTeamService
 import com.yoong.myissue.domain.team.service.TeamService
 import com.yoong.myissue.exception.`class`.DuplicatedModelException
 import com.yoong.myissue.exception.`class`.InvalidCredentialException
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service
 @Service
 class MemberService(
     private val memberRepository: MemberRepository,
-    private val teamService: TeamService,
+    private val teamService:ExternalTeamService,
     private val passwordManagement: PasswordManagement,
     private val jwtPlugin: JwtPlugin
 ){
@@ -52,15 +53,16 @@ class MemberService(
     @Transactional
     fun login(loginRequest: LoginRequest): LoginResponse {
 
-       val member = memberRepository.findByEmail(loginRequest.email) ?: throw DuplicatedModelException("이메일", loginRequest.email)
+       val member = memberRepository.findByEmail(loginRequest.email)?: throw InvalidCredentialException("이메일")
 
-        if (passwordManagement.valid(member.password, loginRequest.password)) throw InvalidCredentialException()
+       if (passwordManagement.valid(member.password, loginRequest.password)) throw InvalidCredentialException("비밀 번호")
 
         return LoginResponse(
             email = member.email,
             accessToken = jwtPlugin.generateAccessToken(member.id!!.toString(), member.email, member.role.name)
         )
     }
+
 
 
 }

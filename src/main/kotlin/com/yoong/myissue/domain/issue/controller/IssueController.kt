@@ -5,8 +5,11 @@ import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
 import com.yoong.myissue.infra.dto.UpdateResponse
 import com.yoong.myissue.domain.issue.service.IssueService
+import com.yoong.myissue.infra.security.config.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 
@@ -17,12 +20,14 @@ class IssueController(
     private val issueService: IssueService
 ) {
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     fun createIssue(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody issueCreateRequest : IssueCreateRequest
     ): ResponseEntity<String> {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueCreateRequest))
+        return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueCreateRequest, userPrincipal.email))
     }
 
     @GetMapping("/{issueId}")

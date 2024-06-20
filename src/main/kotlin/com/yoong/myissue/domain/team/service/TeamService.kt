@@ -8,7 +8,7 @@ import com.yoong.myissue.infra.dto.UpdateResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
-const val DUMMY_TEAM: Long = 1L
+
 
 @Service
 class TeamService(
@@ -48,10 +48,6 @@ class TeamService(
         //TODO(" LEADER가 다른 팀을 삭제 할 경우 NoAuthenticationException")
 
         TODO("Hard DELETE 진행")
-    }
-
-    fun getDummyTeam(): Team {
-        return teamRepository.findByIdOrNull(DUMMY_TEAM)!!
     }
 }
 

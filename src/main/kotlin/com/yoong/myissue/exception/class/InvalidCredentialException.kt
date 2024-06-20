@@ -1,3 +1,5 @@
 package com.yoong.myissue.exception.`class`
 
-class InvalidCredentialException(): RuntimeException("비밀 번호가 일치 하지 않습니다")
+data class InvalidCredentialException(
+    private val content: String,
+): RuntimeException("$content 이/가 일치 하지 않습니다")

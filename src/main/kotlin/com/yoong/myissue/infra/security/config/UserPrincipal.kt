@@ -5,7 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 
 data class UserPrincipal(
     val id: Long,
-    val role: String,
+    val email: String,
     val authorities: Collection<GrantedAuthority>
 ){
 
