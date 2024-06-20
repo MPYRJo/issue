@@ -1,7 +1,9 @@
 package com.yoong.myissue.domain.team.entity
 
 import com.yoong.myissue.domain.issue.entity.Issue
+import com.yoong.myissue.domain.member.dto.MemberResponse
 import com.yoong.myissue.domain.member.entity.Member
+import com.yoong.myissue.domain.team.dto.TeamResponse
 import jakarta.persistence.*
 
 
@@ -22,4 +24,13 @@ class Team(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id : Long? = null
+
+    fun toTeamResponse(): TeamResponse {
+        return TeamResponse(
+            id = id!!,
+            name = name,
+            issue = issues.map { it.toIssueResponse() },
+            member = members.map { it.toMemberResponse() }
+        )
+    }
 }

@@ -1,6 +1,7 @@
 package com.yoong.myissue.domain.member.entity
 
 import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.domain.member.dto.MemberResponse
 import com.yoong.myissue.domain.team.entity.Team
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcType
@@ -33,5 +34,14 @@ class Member (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id : Long? = null
 
+
+    fun toMemberResponse(): MemberResponse {
+        return MemberResponse(
+            id = id!!,
+            email = email,
+            nickname = nickname,
+            role = role
+        )
+    }
 
 }
