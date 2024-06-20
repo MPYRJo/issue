@@ -3,6 +3,8 @@ package com.yoong.myissue.domain.member.entity
 import com.yoong.myissue.domain.issue.enum.Role
 import com.yoong.myissue.domain.team.entity.Team
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcType
+import org.hibernate.dialect.PostgreSQLEnumJdbcType
 
 
 @Entity
@@ -20,6 +22,7 @@ class Member (
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
     val role : Role,
 
     @ManyToOne(fetch = FetchType.LAZY)
