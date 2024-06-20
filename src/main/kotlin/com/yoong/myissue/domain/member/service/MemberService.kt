@@ -1,7 +1,7 @@
 package com.yoong.myissue.domain.member.service
 
 import com.yoong.myissue.domain.issue.enum.Role
-import com.yoong.myissue.domain.member.common.CheckPassword
+import com.yoong.myissue.domain.member.common.PasswordManagement
 import com.yoong.myissue.domain.member.dto.LoginRequest
 import com.yoong.myissue.domain.member.dto.LoginResponse
 import com.yoong.myissue.domain.member.dto.SignupRequest
@@ -11,7 +11,8 @@ import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.domain.team.service.TeamService
 import com.yoong.myissue.exception.`class`.DuplicatedModelException
 import com.yoong.myissue.exception.`class`.InvalidCredentialException
-import com.yoong.myissue.infra.security.jwt.PasswordEncoder
+import com.yoong.myissue.infra.security.jwt.JwtPlugin
+import io.jsonwebtoken.Jwts
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -20,8 +21,8 @@ import org.springframework.stereotype.Service
 class MemberService(
     private val memberRepository: MemberRepository,
     private val teamService: TeamService,
-    private val passwordEncoder: PasswordEncoder,
-    private val checkPassword: CheckPassword
+    private val passwordManagement: PasswordManagement,
+    private val jwtPlugin: JwtPlugin
 ){
 
     @Transactional
@@ -31,7 +32,7 @@ class MemberService(
 
         if(memberRepository.existsByNickname(signupRequest.nickname)) throw DuplicatedModelException( "닉네임" ,signupRequest.nickname)
 
-        checkPassword.duplicate(signupRequest.password, signupRequest.password2)
+        passwordManagement.duplicate(signupRequest.password, signupRequest.password2)
 
         val team: Team = teamService.getDummyTeam()
 
@@ -39,7 +40,7 @@ class MemberService(
             Member(
                 nickname = signupRequest.nickname,
                 email = signupRequest.email,
-                password = passwordEncoder.bCryptPasswordEncoder().encode(signupRequest.password),
+                password = passwordManagement.encode(signupRequest.password),
                 role = Role.USER,
                 team = team
             )
@@ -51,9 +52,15 @@ class MemberService(
 
     @Transactional
     fun login(loginRequest: LoginRequest): LoginResponse {
-        //TODO("email 이 없다면 ModelNotFoundException")
-        //TODO("비밀번호가 일치 하지 않다면 InvalidCredentialException")
-        TODO("로그인 완료 시 이메일과 Access Token 을 리턴")
+
+       val member = memberRepository.findByEmail(loginRequest.email) ?: throw DuplicatedModelException("이메일", loginRequest.email)
+
+        if (passwordManagement.valid(member.password, loginRequest.password)) throw InvalidCredentialException()
+
+        return LoginResponse(
+            email = member.email,
+            accessToken = jwtPlugin.generateAccessToken(member.id!!.toString(), member.email, member.role.name)
+        )
     }
 
 

@@ -1,13 +1,14 @@
 package com.yoong.myissue.domain.member.service
 
 import com.yoong.myissue.domain.issue.enum.Role
-import com.yoong.myissue.domain.member.common.CheckPassword
+import com.yoong.myissue.domain.member.common.PasswordManagement
 import com.yoong.myissue.domain.member.dto.SignupRequest
 import com.yoong.myissue.domain.member.entity.Member
 import com.yoong.myissue.domain.member.repository.MemberRepository
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.domain.team.repository.TeamRepository
 import com.yoong.myissue.domain.team.service.TeamService
+import com.yoong.myissue.infra.security.jwt.JwtPlugin
 import com.yoong.myissue.infra.security.jwt.PasswordEncoder
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -20,8 +21,9 @@ class MemberServiceTest {
     private val memberRepository = mockk<MemberRepository>()
     private val teamRepository = mockk<TeamRepository>()
     private val teamService = TeamService(teamRepository)
-    private val checkPassword = mockk<CheckPassword>()
-    private val memberService = MemberService(memberRepository, teamService, PasswordEncoder(), checkPassword)
+    private val passwordManagement = mockk<PasswordManagement>()
+    private val jwtPlugin = mockk<JwtPlugin>()
+    private val memberService = MemberService(memberRepository, teamService, passwordManagement, jwtPlugin)
 
 
     @Test
@@ -45,7 +47,7 @@ class MemberServiceTest {
             team.id = 1L
             team
         }
-        every { checkPassword.duplicate(any(), any()) }returns Unit
+        every { passwordManagement.duplicate(any(), any()) }returns Unit
 
         every { memberRepository.save(any()) }returns Member(
             nickname = "test",
