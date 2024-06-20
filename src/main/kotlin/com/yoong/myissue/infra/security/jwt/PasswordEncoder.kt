@@ -8,5 +8,5 @@ import org.springframework.stereotype.Component
 class PasswordEncoder {
 
     @Bean
-    fun encode() = BCryptPasswordEncoder()
+    fun bCryptPasswordEncoder() = BCryptPasswordEncoder()
 }

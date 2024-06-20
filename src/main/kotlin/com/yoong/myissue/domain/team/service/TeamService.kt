@@ -2,12 +2,18 @@ package com.yoong.myissue.domain.team.service
 
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
+import com.yoong.myissue.domain.team.entity.Team
+import com.yoong.myissue.domain.team.repository.TeamRepository
 import com.yoong.myissue.infra.dto.UpdateResponse
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
-@Service
-class TeamService {
+const val DUMMY_TEAM: Long = 1L
 
+@Service
+class TeamService(
+    private val teamRepository: TeamRepository,
+){
 
     fun createTeam(createTeamRequest: TeamRequest): String {
         //TODO("유저의 권한이 USER가 아닐 경우 NoAuthenticationException")
@@ -44,4 +50,9 @@ class TeamService {
         TODO("Hard DELETE 진행")
     }
 
+    fun getDummyTeam(): Team {
+        return teamRepository.findByIdOrNull(DUMMY_TEAM)!!
+    }
 }
+
+

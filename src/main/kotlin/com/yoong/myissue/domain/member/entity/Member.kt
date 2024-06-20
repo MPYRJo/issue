@@ -25,9 +25,10 @@ class Member (
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", nullable = false)
     val team : Team
-
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id : Long? = null
+
+
 }
