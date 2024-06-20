@@ -1,6 +1,7 @@
 package com.yoong.myissue.domain.member.service
 
 import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.domain.member.common.CheckPassword
 import com.yoong.myissue.domain.member.dto.LoginRequest
 import com.yoong.myissue.domain.member.dto.LoginResponse
 import com.yoong.myissue.domain.member.dto.SignupRequest
@@ -19,7 +20,8 @@ import org.springframework.stereotype.Service
 class MemberService(
     private val memberRepository: MemberRepository,
     private val teamService: TeamService,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val checkPassword: CheckPassword
 ){
 
     @Transactional
@@ -29,7 +31,7 @@ class MemberService(
 
         if(memberRepository.existsByNickname(signupRequest.nickname)) throw DuplicatedModelException( "닉네임" ,signupRequest.nickname)
 
-        matchPassword(signupRequest.password, signupRequest.password2)
+        checkPassword.duplicate(signupRequest.password, signupRequest.password2)
 
         val team: Team = teamService.getDummyTeam()
 
@@ -54,8 +56,5 @@ class MemberService(
         TODO("로그인 완료 시 이메일과 Access Token 을 리턴")
     }
 
-    fun matchPassword(password: String, password2: String) {
-        if(password != password2) throw InvalidCredentialException()
-    }
 
 }
