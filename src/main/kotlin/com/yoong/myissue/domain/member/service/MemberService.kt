@@ -12,7 +12,6 @@ import com.yoong.myissue.domain.team.service.TeamService
 import com.yoong.myissue.exception.`class`.DuplicatedModelException
 import com.yoong.myissue.exception.`class`.InvalidCredentialException
 import com.yoong.myissue.infra.security.jwt.JwtPlugin
-import io.jsonwebtoken.Jwts
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -32,7 +31,7 @@ class MemberService(
 
         if(memberRepository.existsByNickname(signupRequest.nickname)) throw DuplicatedModelException( "닉네임" ,signupRequest.nickname)
 
-        passwordManagement.duplicate(signupRequest.password, signupRequest.password2)
+        passwordManagement.isSame(signupRequest.password, signupRequest.password2)
 
         val team: Team = teamService.getDummyTeam()
 

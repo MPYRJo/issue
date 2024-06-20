@@ -16,8 +16,8 @@ class MemberMethodTest {
         val password = "test"
         val password2 = "test2"
 
-        every { passwordManagement.duplicate(any(), any()) } throws InvalidCredentialException()
+        every { passwordManagement.isSame(any(), any()) } throws InvalidCredentialException()
 
-        shouldThrow<InvalidCredentialException> { passwordManagement.duplicate(password, password2) }
+        shouldThrow<InvalidCredentialException> { passwordManagement.isSame(password, password2) }
     }
 }

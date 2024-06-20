@@ -9,7 +9,6 @@ import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.domain.team.repository.TeamRepository
 import com.yoong.myissue.domain.team.service.TeamService
 import com.yoong.myissue.infra.security.jwt.JwtPlugin
-import com.yoong.myissue.infra.security.jwt.PasswordEncoder
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
@@ -47,7 +46,7 @@ class MemberServiceTest {
             team.id = 1L
             team
         }
-        every { passwordManagement.duplicate(any(), any()) }returns Unit
+        every { passwordManagement.isSame(any(), any()) }returns Unit
 
         every { memberRepository.save(any()) }returns Member(
             nickname = "test",

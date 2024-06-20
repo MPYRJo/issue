@@ -9,7 +9,7 @@ class PasswordManagement(
     private val passwordEncoder: PasswordEncoder,
     ) {
 
-    fun duplicate(password: String, password2: String) {
+    fun isSame(password: String, password2: String) {
         if(password != password2) throw InvalidCredentialException()
     }
 
