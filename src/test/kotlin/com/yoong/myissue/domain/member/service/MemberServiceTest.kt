@@ -1,6 +1,7 @@
 package com.yoong.myissue.domain.member.service
 
 import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.domain.member.common.CheckPassword
 import com.yoong.myissue.domain.member.dto.SignupRequest
 import com.yoong.myissue.domain.member.entity.Member
 import com.yoong.myissue.domain.member.repository.MemberRepository
@@ -19,7 +20,8 @@ class MemberServiceTest {
     private val memberRepository = mockk<MemberRepository>()
     private val teamRepository = mockk<TeamRepository>()
     private val teamService = TeamService(teamRepository)
-    private val memberService = MemberService(memberRepository, teamService, PasswordEncoder())
+    private val checkPassword = mockk<CheckPassword>()
+    private val memberService = MemberService(memberRepository, teamService, PasswordEncoder(), checkPassword)
 
 
     @Test
@@ -43,7 +45,7 @@ class MemberServiceTest {
             team.id = 1L
             team
         }
-        memberService.matchPassword(signupRequest.password2, signupRequest.password) shouldBe Unit
+        every { checkPassword.duplicate(any(), any()) }returns Unit
 
         every { memberRepository.save(any()) }returns Member(
             nickname = "test",
