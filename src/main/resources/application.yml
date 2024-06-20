@@ -14,4 +14,8 @@ spring:
         default_batch_fetch_size: 500
 
 
-
+auth:
+  jwt:
+    issuer : myissue.yoong.com
+    secret : 'dsfkghrjhxci139dslfnmw239cxcvn932'
+    accessTokenExpirationHour : 168
