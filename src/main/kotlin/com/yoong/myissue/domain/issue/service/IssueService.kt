@@ -47,13 +47,17 @@ class IssueService(
     }
 
     fun getIssueList(): List<IssueResponse> {
-        //TODO(검색 결과가 들어 왔을 경우 검색 결과에 맞춰서 쿼리를 내려 준다)
-        TODO("쿼리에 맞는 값이 나왔다면 List 형태로 반환")
+
+        val issueList = issueRepository.findAll()
+
+        return issueList.map { IssueResponse.from(it) }
     }
 
     fun updateIssue(issueId: Long, issueUpdateRequest: IssueUpdateRequest): UpdateResponse {
-        //TODO("이슈 아이디 를 받이서 아이디 가 없는 경우 ModelNotFoundException")
-        //TODO("가져온 이슈를 업데이트")
+
+        val issue = issueRepository.findByIdOrNull(issueId) ?: throw ModelNotFoundException("이슈", issueId.toString())
+
+        issue.update(issueUpdateRequest)
         TODO("이슈 변경 사항을 반환")
     }
 
