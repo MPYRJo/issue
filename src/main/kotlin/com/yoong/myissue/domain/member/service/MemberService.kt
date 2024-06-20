@@ -8,6 +8,8 @@ import com.yoong.myissue.domain.member.entity.Member
 import com.yoong.myissue.domain.member.repository.MemberRepository
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.domain.team.service.TeamService
+import com.yoong.myissue.exception.`class`.DuplicatedModelException
+import com.yoong.myissue.exception.`class`.InvalidCredentialException
 import com.yoong.myissue.infra.security.jwt.PasswordEncoder
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -23,9 +25,9 @@ class MemberService(
     @Transactional
     fun signup(signupRequest: SignupRequest): String {
 
-        if(memberRepository.existsByEmail(signupRequest.email)) throw duplicatedModelException(signupRequest.email)
+        if(memberRepository.existsByEmail(signupRequest.email)) throw DuplicatedModelException( "이메일" ,signupRequest.email)
 
-        if(memberRepository.existsByNickname(signupRequest.nickname)) throw duplicatedModelException(signupRequest.nickname)
+        if(memberRepository.existsByNickname(signupRequest.nickname)) throw DuplicatedModelException( "닉네임" ,signupRequest.nickname)
 
         matchPassword(signupRequest.password, signupRequest.password2)
 
@@ -43,6 +45,7 @@ class MemberService(
 
         return "회원 가입이 완료 되었습니다!!"
     }
+
 
     @Transactional
     fun login(loginRequest: LoginRequest): LoginResponse {
