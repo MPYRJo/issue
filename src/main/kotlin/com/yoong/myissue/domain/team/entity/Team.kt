@@ -15,7 +15,7 @@ class Team(
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     val members: List<Member>,
 
-    @OneToMany(mappedBy = "issue", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "team", orphanRemoval = true, fetch = FetchType.LAZY)
     val issues: List<Issue>
 ){
 

@@ -4,5 +4,5 @@ enum class WorkingStatus {
     TODO,
     IN_PROGRESS,
     PENDING,
-    COMPLETED,
+    DONE,
 }

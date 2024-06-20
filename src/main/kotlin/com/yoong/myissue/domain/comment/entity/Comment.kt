@@ -2,6 +2,7 @@ package com.yoong.myissue.domain.comment.entity
 
 import com.yoong.myissue.domain.comment.enum.CheckingStatus
 import com.yoong.myissue.domain.issue.entity.Issue
+import com.yoong.myissue.domain.member.entity.Member
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp

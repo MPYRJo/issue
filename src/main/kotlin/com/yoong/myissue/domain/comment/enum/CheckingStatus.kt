@@ -1,9 +1,9 @@
 package com.yoong.myissue.domain.comment.enum
 
 enum class CheckingStatus {
-    OK,
+    FEEDBACK,
     WAITING,
-    SUCCEEDED,
+    APPROVE,
     PENDING,
-    NO
+    REJECT
 }

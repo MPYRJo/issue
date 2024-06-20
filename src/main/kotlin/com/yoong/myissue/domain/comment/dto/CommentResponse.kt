@@ -2,6 +2,7 @@ package com.yoong.myissue.domain.comment.dto
 
 import com.yoong.myissue.domain.comment.enum.CheckingStatus
 import com.yoong.myissue.domain.issue.dto.IssueResponse
+import com.yoong.myissue.domain.member.dto.MemberResponse
 import java.time.LocalDateTime
 
 data class CommentResponse(
