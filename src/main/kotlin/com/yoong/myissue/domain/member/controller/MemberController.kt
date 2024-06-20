@@ -1,5 +1,7 @@
 package com.yoong.myissue.domain.member.controller
 
+import com.yoong.myissue.domain.member.dto.LoginRequest
+import com.yoong.myissue.domain.member.dto.LoginResponse
 import com.yoong.myissue.domain.member.dto.SignupRequest
 import com.yoong.myissue.domain.member.service.MemberService
 import org.springframework.http.HttpStatus
@@ -19,5 +21,12 @@ class MemberController(
     fun signup(@RequestBody signupRequest: SignupRequest): ResponseEntity<String> {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.signup(signupRequest))
+    }
+
+
+    @PostMapping("/login")
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse>{
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.login(loginRequest))
+
     }
 }
