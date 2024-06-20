@@ -6,7 +6,9 @@ import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.repository.IssueRepository
 import com.yoong.myissue.domain.member.service.ExternalMemberService
+import com.yoong.myissue.exception.`class`.ModelNotFoundException
 import com.yoong.myissue.infra.dto.UpdateResponse
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -38,8 +40,10 @@ class IssueService(
 
     @Transactional(readOnly = true)
     fun getIssue(issueId: Long): IssueResponse {
-        TODO("이슈 아이디 를 받이서 아이디 가 없는 경우 ModelNotFoundException")
-        //TODO(이슈를 조회 해서 반환)
+
+        val issue = issueRepository.findByIdOrNull(issueId) ?: throw ModelNotFoundException("이슈", issueId.toString())
+
+        return IssueResponse.from(issue)
     }
 
     fun getIssueList(): List<IssueResponse> {
@@ -62,3 +66,4 @@ class IssueService(
 
 
 }
+
