@@ -54,7 +54,7 @@ class MemberService(
         TODO("로그인 완료 시 이메일과 Access Token 을 리턴")
     }
 
-    private fun matchPassword(password: String, password2: String) {
+    fun matchPassword(password: String, password2: String) {
         if(password != password2) throw InvalidCredentialException()
     }
 
