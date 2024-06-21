@@ -49,7 +49,7 @@ class IssueService(
     @Transactional(readOnly = true)
     fun getIssueList(): List<IssueResponse> {
 
-        val issueList = issueRepository.findAll()
+        val issueList = issueRepository.findAll().sortedByDescending { it.getCreatedAt() }
 
         return issueList.map { it.toIssueResponse() }
     }

@@ -67,7 +67,7 @@ class IssueController(
         return ResponseEntity.status(HttpStatus.OK).body(issueService.updateIssue(issueId, issueUpdateRequest))
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_LEADER')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_LEADER')")
     @DeleteMapping("/{issueId}")
     fun deleteIssue(
         @PathVariable("issueId") issueId: Long,

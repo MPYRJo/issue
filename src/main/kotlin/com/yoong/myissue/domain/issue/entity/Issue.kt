@@ -77,4 +77,6 @@ class Issue(
         )
     }
 
+    fun getCreatedAt() = this.createdAt
+
 }
