@@ -34,15 +34,13 @@ class MemberService(
 
         passwordManagement.isSame(signupRequest.password, signupRequest.password2)
 
-        val team: Team = teamService.getDummyTeam()
-
         memberRepository.save(
             Member(
                 nickname = signupRequest.nickname,
                 email = signupRequest.email,
                 password = passwordManagement.encode(signupRequest.password),
                 role = Role.USER,
-                team = team
+                team = teamService.getDummyTeam()
             )
         )
 
@@ -55,11 +53,11 @@ class MemberService(
 
        val member = memberRepository.findByEmail(loginRequest.email)?: throw InvalidCredentialException("이메일")
 
-       if (passwordManagement.valid(member.password, loginRequest.password)) throw InvalidCredentialException("비밀 번호")
+       if (member.validPassword(passwordManagement,loginRequest.password)) throw InvalidCredentialException("비밀 번호")
 
         return LoginResponse(
-            email = member.email,
-            accessToken = jwtPlugin.generateAccessToken(member.id!!.toString(), member.email, member.role.name)
+            email = loginRequest.email,
+            accessToken = member.getAccessToken(jwtPlugin)
         )
     }
 

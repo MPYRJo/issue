@@ -4,9 +4,7 @@ import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
 import com.yoong.myissue.domain.issue.enum.Priority
 import com.yoong.myissue.domain.issue.enum.WorkingStatus
-import com.yoong.myissue.domain.member.dto.MemberResponse
 import com.yoong.myissue.domain.member.entity.Member
-import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.entity.Team
 import jakarta.persistence.*
 import jakarta.persistence.Table
@@ -75,9 +73,10 @@ class Issue(
             description = description,
             priority = priority,
             workingStatus = workingStatus,
-            nickname = member.nickname,
-            teamName = team.name,
+            nickname = nickname,
+            teamName = name,
             createdAt = createdAt,
         )
     }
+
 }

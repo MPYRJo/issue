@@ -23,18 +23,19 @@ class IssueService(
 
         val member = memberService.searchEmail(email)
 
-        val savedIssue = issueRepository.save(
+
+        issueRepository.save(
             Issue(
                 title = issueCreateRequest.title,
                 description = issueCreateRequest.description,
                 priority = issueCreateRequest.priority,
                 workingStatus = issueCreateRequest.workingStatus,
                 member = member,
-                team = member.team,
+                team = member.getTeam(),
             )
         )
 
-        return "이슈가 등록 되었습니다 이슈 번호 : ${savedIssue.getId()}"
+        return "이슈가 등록 되었습니다 이슈 이름 : ${issueCreateRequest.title}"
     }
 
     @Transactional(readOnly = true)
@@ -45,6 +46,7 @@ class IssueService(
         return issue.toIssueResponse()
     }
 
+    @Transactional(readOnly = true)
     fun getIssueList(): List<IssueResponse> {
 
         val issueList = issueRepository.findAll()
@@ -58,9 +60,9 @@ class IssueService(
 
         issue.update(issueUpdateRequest)
 
-        val savedData = issueRepository.save(issue)
+        issueRepository.save(issue)
 
-        return "업데이트 가 완료 되었습니다, 이슈 번호 ${savedData.getId()}"
+        return "업데이트 가 완료 되었습니다, 이슈 번호 $issueId"
     }
 
     fun deleteIssue(issueId: Long): String {
@@ -69,7 +71,7 @@ class IssueService(
 
         issueRepository.delete(issue)
         //TODO("가져온 이슈를 SpringScheduler 에 의해서 3시간(90일) 이후에 자동 삭제")
-        return "삭제가 완료 되었습니다, 이슈 번호 ${issue.getId()}"
+        return "삭제가 완료 되었습니다, 이슈 번호 $issueId"
     }
 
 

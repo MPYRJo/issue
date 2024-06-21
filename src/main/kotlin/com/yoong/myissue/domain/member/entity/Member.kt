@@ -1,8 +1,10 @@
 package com.yoong.myissue.domain.member.entity
 
 import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.domain.member.common.PasswordManagement
 import com.yoong.myissue.domain.member.dto.MemberResponse
 import com.yoong.myissue.domain.team.entity.Team
+import com.yoong.myissue.infra.security.jwt.JwtPlugin
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcType
 import org.hibernate.dialect.PostgreSQLEnumJdbcType
@@ -13,27 +15,30 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType
 class Member (
 
     @Column(name = "nickname", nullable = false, unique = true)
-    val nickname: String,
+    private val nickname: String,
 
     @Column(name = "email", nullable = false, unique = true)
-    val email : String,
+    private val email : String,
 
     @Column(name = "password", nullable = false)
-    val password: String,
+    private val password: String,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     @JdbcType(PostgreSQLEnumJdbcType::class)
-    val role : Role,
+    private val role : Role,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", nullable = false)
-    val team : Team
+    private val team : Team
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id : Long? = null
+    private val id : Long? = null
 
+    fun validPassword(passwordManagement: PasswordManagement, password: String):Boolean{
+        return passwordManagement.valid(this.password, password)
+    }
 
     fun toMemberResponse(): MemberResponse {
         return MemberResponse(
@@ -44,4 +49,9 @@ class Member (
         )
     }
 
+    fun getAccessToken(jwtPlugin: JwtPlugin): String {
+       return jwtPlugin.generateAccessToken(this.id.toString(), this.email, this.role.name)
+    }
+
+    fun getTeam() = this.team
 }
