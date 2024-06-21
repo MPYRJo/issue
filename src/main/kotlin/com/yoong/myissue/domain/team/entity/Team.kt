@@ -33,4 +33,6 @@ class Team(
             member = members.map { it.toMemberResponse() }
         )
     }
+
+    fun getTeamName() = this.name
 }

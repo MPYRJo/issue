@@ -54,4 +54,5 @@ class Member (
     }
 
     fun getTeam() = this.team
+    fun getNickname() = this.nickname
 }

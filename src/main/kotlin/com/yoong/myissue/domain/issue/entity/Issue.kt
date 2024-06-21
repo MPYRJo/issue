@@ -64,8 +64,6 @@ class Issue(
         this.workingStatus = issueUpdateRequest.workingStatus ?: this.workingStatus
     }
 
-    fun getId() = this.id
-
     fun toIssueResponse(): IssueResponse {
         return IssueResponse(
             id = id!!,
@@ -73,8 +71,8 @@ class Issue(
             description = description,
             priority = priority,
             workingStatus = workingStatus,
-            nickname = nickname,
-            teamName = name,
+            nickname = member.getNickname(),
+            teamName = team.getTeamName(),
             createdAt = createdAt,
         )
     }

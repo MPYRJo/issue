@@ -6,11 +6,15 @@ import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
 import com.yoong.myissue.infra.dto.UpdateResponse
 import com.yoong.myissue.domain.issue.service.IssueService
 import com.yoong.myissue.infra.security.config.UserPrincipal
+import jakarta.validation.Valid
+import org.springframework.boot.context.properties.bind.BindResult
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDateTime
 
 
@@ -20,12 +24,13 @@ class IssueController(
     private val issueService: IssueService
 ) {
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     fun createIssue(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
-        @RequestBody issueCreateRequest : IssueCreateRequest
+        @Valid @RequestBody issueCreateRequest : IssueCreateRequest,
+        bindingResult: BindingResult
     ): ResponseEntity<String> {
+        if(bindingResult.hasErrors()) throw IllegalArgumentException(bindingResult.fieldError!!.defaultMessage.toString())
 
         return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueCreateRequest, userPrincipal.email))
     }

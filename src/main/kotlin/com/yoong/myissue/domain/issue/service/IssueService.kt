@@ -62,7 +62,7 @@ class IssueService(
 
         issueRepository.save(issue)
 
-        return "업데이트 가 완료 되었습니다, 이슈 번호 $issueId"
+        return "업데이트 가 완료 되었습니다"
     }
 
     fun deleteIssue(issueId: Long): String {
