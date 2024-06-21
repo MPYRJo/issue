@@ -1,8 +1,6 @@
 package com.yoong.myissue.exception.handler
 
-import com.yoong.myissue.exception.`class`.DuplicatedModelException
-import com.yoong.myissue.exception.`class`.InvalidCredentialException
-import com.yoong.myissue.exception.`class`.ModelNotFoundException
+import com.yoong.myissue.exception.`class`.*
 import com.yoong.myissue.exception.dto.ErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -33,6 +31,18 @@ class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException::class)
     fun illegalArgumentException(e: IllegalArgumentException): ResponseEntity<ErrorResponse> {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse(404, e.message?: "잘못된 값을 입력 하였습니다"))
+
+    }
+
+    @ExceptionHandler(NoAuthenticationException::class)
+    fun noAuthenticationException(e: NoAuthenticationException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorResponse(403, e.message?: "권한 없음"))
+
+    }
+
+    @ExceptionHandler(BadRequestException::class)
+    fun badRequestException(e: BadRequestException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse(400, e.message?: "잘못된 접근"))
 
     }
 }

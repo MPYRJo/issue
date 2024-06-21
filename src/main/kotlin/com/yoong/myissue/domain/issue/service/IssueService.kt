@@ -32,6 +32,7 @@ class IssueService(
                 workingStatus = issueCreateRequest.workingStatus,
                 member = member,
                 team = member.getTeam(),
+                comment = listOf()
             )
         )
 

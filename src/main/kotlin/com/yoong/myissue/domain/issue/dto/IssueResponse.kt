@@ -1,5 +1,7 @@
 package com.yoong.myissue.domain.issue.dto
 
+import com.yoong.myissue.domain.comment.dto.CommentResponse
+import com.yoong.myissue.domain.comment.entity.Comment
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.enum.Priority
 import com.yoong.myissue.domain.issue.enum.WorkingStatus
@@ -17,4 +19,5 @@ data class IssueResponse (
     val nickname: String,
     val teamName : String,
     val createdAt: LocalDateTime,
+    val comment: List<CommentResponse>
 )

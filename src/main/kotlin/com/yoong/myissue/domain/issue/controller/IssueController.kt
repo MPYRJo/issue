@@ -5,6 +5,7 @@ import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
 import com.yoong.myissue.infra.dto.UpdateResponse
 import com.yoong.myissue.domain.issue.service.IssueService
+import com.yoong.myissue.exception.`class`.NoAuthenticationException
 import com.yoong.myissue.infra.security.config.UserPrincipal
 import jakarta.validation.Valid
 import org.springframework.boot.context.properties.bind.BindResult
@@ -27,10 +28,13 @@ class IssueController(
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_LEADER')")
     @PostMapping
     fun createIssue(
-        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @Valid @RequestBody issueCreateRequest : IssueCreateRequest,
         bindingResult: BindingResult
     ): ResponseEntity<String> {
+
+        if(userPrincipal == null) throw NoAuthenticationException()
+
         if(bindingResult.hasErrors()) throw IllegalArgumentException(bindingResult.fieldError!!.defaultMessage.toString())
 
         return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueCreateRequest, userPrincipal.email))

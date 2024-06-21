@@ -14,6 +14,7 @@ CREATE TABLE issue (
     working_status ws NOT NULL,
     member_id BIGINT NOT NULL,
     team_id BIGINT NOT NULL
+    comment_id BIGINT NOT NULL
 );
 
 CREATE TABLE member (
@@ -54,3 +55,6 @@ REFERENCES team (id);
 
 ALTER TABLE member ADD CONSTRAINT FK_team_TO_member_1 FOREIGN KEY (team_id)
 REFERENCES team (id);
+
+ALTER TABLE issue ADD CONSTRAINT FK_comment_TO_issue_1 FOREIGN KEY (comment_id)
+REFERENCES comment (id);

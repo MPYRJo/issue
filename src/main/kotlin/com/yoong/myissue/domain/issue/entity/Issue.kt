@@ -1,5 +1,6 @@
 package com.yoong.myissue.domain.issue.entity
 
+import com.yoong.myissue.domain.comment.entity.Comment
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
 import com.yoong.myissue.domain.issue.enum.Priority
@@ -12,7 +13,8 @@ import org.hibernate.annotations.*
 import org.hibernate.dialect.PostgreSQLEnumJdbcType
 import java.time.LocalDateTime
 
-
+@SQLDelete(sql = "UPDATE issue SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at is null")
 @Entity
 @Table(name = "issue")
 class Issue(
@@ -40,6 +42,10 @@ class Issue(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private val team: Team,
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "issue_id")
+    private val comment: List<Comment>
 
     ) {
     @Id
@@ -74,9 +80,11 @@ class Issue(
             nickname = member.getNickname(),
             teamName = team.getTeamName(),
             createdAt = createdAt,
+            comment = comment.map { it.toCommentResponse() }
         )
     }
 
     fun getCreatedAt() = this.createdAt
+    fun getMember() = this.member.getId()
 
 }

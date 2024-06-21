@@ -53,6 +53,8 @@ class Member (
        return jwtPlugin.generateAccessToken(this.id.toString(), this.email, this.role.name)
     }
 
+    fun getId() = this.id
     fun getTeam() = this.team
     fun getNickname() = this.nickname
+    fun getRole() = this.role
 }
