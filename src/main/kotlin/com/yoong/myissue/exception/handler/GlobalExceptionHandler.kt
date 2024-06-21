@@ -29,4 +29,10 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse(404, e.message?: "존재 하지 않음"))
 
     }
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun illegalArgumentException(e: IllegalArgumentException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse(404, e.message?: "잘못된 값을 입력 하였습니다"))
+
+    }
 }

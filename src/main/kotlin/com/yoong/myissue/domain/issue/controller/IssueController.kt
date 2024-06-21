@@ -24,6 +24,7 @@ class IssueController(
     private val issueService: IssueService
 ) {
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_LEADER')")
     @PostMapping
     fun createIssue(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
@@ -35,6 +36,7 @@ class IssueController(
         return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueCreateRequest, userPrincipal.email))
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_LEADER')")
     @GetMapping("/{issueId}")
     fun getIssue(
         @PathVariable("issueId") issueId: Long,
@@ -43,6 +45,7 @@ class IssueController(
         return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssue(issueId))
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_LEADER')")
     @GetMapping()
     fun getIssueList(
         @RequestParam(required = false,) title: String?,
@@ -54,6 +57,7 @@ class IssueController(
         return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssueList())
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_LEADER')")
     @PutMapping("/{issueId}")
     fun updateIssue(
         @PathVariable("issueId") issueId: Long,
@@ -63,6 +67,7 @@ class IssueController(
         return ResponseEntity.status(HttpStatus.OK).body(issueService.updateIssue(issueId, issueUpdateRequest))
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_LEADER')")
     @DeleteMapping("/{issueId}")
     fun deleteIssue(
         @PathVariable("issueId") issueId: Long,
