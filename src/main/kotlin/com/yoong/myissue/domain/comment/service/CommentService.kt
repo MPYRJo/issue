@@ -7,7 +7,6 @@ import com.yoong.myissue.domain.comment.repository.CommentRepository
 import com.yoong.myissue.domain.issue.service.ExternalIssueService
 import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.exception.`class`.ModelNotFoundException
-import com.yoong.myissue.infra.dto.UpdateResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -31,20 +30,20 @@ class CommentService(
                 issue = issue
             )
         )
-        return "코맨트가 등록 되었습니다 이슈 번호 : ${createCommentRequest.issueId}, 코맨트 내용 : ${createCommentRequest.content}"
+        return "댓글이 등록 되었습니다 이슈 번호 : ${createCommentRequest.issueId}, 코맨트 내용 : ${createCommentRequest.content}"
     }
 
-    fun updateComment(commentId: Long, updateCommentRequest: UpdateCommentRequest): UpdateResponse {
+    fun updateComment(commentId: Long, updateCommentRequest: UpdateCommentRequest): String {
         val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("댓글", commentId.toString())
-
-        //TODO("Comment 업데이트")
-        TODO("업데이트 된 코맨트를 반환")
+        comment.update(updateCommentRequest)
+        commentRepository.save(comment)
+        return "댓글 수정 완료 했습니다"
     }
 
     fun deleteComment(commentId: Long): String {
-        //TODO("Comment에 해당 하는 id가 존재 하지 않을 경우 ModelNotfoundException")
-        //TODO("Comment 삭제")
-        TODO("삭제 여부를 반환")
+        val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("댓글", commentId.toString())
+        commentRepository.delete(comment)
+        return "삭제가 완료 되었습니다 댓글 아이디 : $commentId"
     }
 
 

@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*
 import com.yoong.myissue.domain.comment.dto.*
 import com.yoong.myissue.domain.comment.service.CommentService
 import com.yoong.myissue.infra.dto.UpdateResponse
-
-
+import com.yoong.myissue.infra.security.config.UserPrincipal
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 
 
 @RestController
@@ -18,17 +18,18 @@ class CommentController(
 
     @PostMapping
     fun createComment(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody createCommentRequest: CreateCommentRequest
     ): ResponseEntity<String> {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(createCommentRequest))
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(createCommentRequest, userPrincipal.email))
     }
 
     @PutMapping("/{commentId}")
     fun updateComment(
         @PathVariable commentId: Long,
         @RequestBody updateCommentRequest: UpdateCommentRequest
-    ): ResponseEntity<UpdateResponse>{
+    ): ResponseEntity<String>{
 
         return ResponseEntity.status(HttpStatus.OK).body(commentService.updateComment(commentId, updateCommentRequest))
     }
