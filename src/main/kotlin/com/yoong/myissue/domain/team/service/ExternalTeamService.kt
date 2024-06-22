@@ -15,4 +15,8 @@ class ExternalTeamService(
     fun getDummyTeam(): Team {
         return teamRepository.findByIdOrNull(DUMMY_TEAM)!!
     }
+
+    fun validDummyTeam(team: Team):Boolean {
+       return team != teamRepository.findByIdOrNull(DUMMY_TEAM)!!
+    }
 }

@@ -45,4 +45,10 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse(400, e.message?: "잘못된 접근"))
 
     }
+
+    @ExceptionHandler(DummyTeamException::class)
+    fun dummyTeamException(e: DummyTeamException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse(400, e.message?: "더미팀 선택 불가"))
+
+    }
 }

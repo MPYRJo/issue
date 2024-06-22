@@ -5,6 +5,7 @@ import com.yoong.myissue.domain.comment.entity.Comment
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.enum.Role
 import com.yoong.myissue.domain.member.entity.Member
+import com.yoong.myissue.exception.`class`.NoAuthenticationException
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,10 +14,11 @@ class ValidAuthentication {
 
     fun role(role: Role, authenticationType: AuthenticationType):Boolean {
 
-        when(authenticationType.name){
-            "FULL_ACCESS" -> return role == Role.ADMIN
-            "LEADER" -> return role == Role.LEADER
-            "LEADER_AND_ADMIN" -> return role != Role.USER
+        return when(authenticationType.name){
+            "USER" -> if(role == Role.USER) true else throw NoAuthenticationException()
+            "FULL_ACCESS" -> if(role == Role.ADMIN) true else throw NoAuthenticationException()
+            "LEADER" -> if(role == Role.LEADER) true else throw NoAuthenticationException()
+            "LEADER_AND_ADMIN" -> if(role != Role.USER) true else throw NoAuthenticationException()
             else -> throw IllegalArgumentException("해당 규칙은 존재하지 않습니다")
         }
 

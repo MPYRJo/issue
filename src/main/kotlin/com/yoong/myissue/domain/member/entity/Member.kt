@@ -26,11 +26,11 @@ class Member (
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     @JdbcType(PostgreSQLEnumJdbcType::class)
-    private val role : Role,
+    private var role : Role,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", nullable = false)
-    private val team : Team
+    private var team : Team
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,8 +53,13 @@ class Member (
        return jwtPlugin.generateAccessToken(this.id.toString(), this.email, this.role.name)
     }
 
-    fun getId() = this.id
-    fun getTeam() = this.team
-    fun getNickname() = this.nickname
-    fun getRole() = this.role
+    fun getId() = id
+    fun getTeam() = team
+    fun getNickname() = nickname
+    fun getRole() = role
+
+    fun promotionLeader(team: Team) {
+        this.team = team
+        role = Role.LEADER
+    }
 }

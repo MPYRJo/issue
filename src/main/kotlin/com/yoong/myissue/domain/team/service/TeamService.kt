@@ -1,53 +1,105 @@
 package com.yoong.myissue.domain.team.service
 
+import com.yoong.myissue.common.`class`.ValidAuthentication
+import com.yoong.myissue.common.enum.AuthenticationType
+import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.domain.team.repository.TeamRepository
+import com.yoong.myissue.exception.`class`.DummyTeamException
+import com.yoong.myissue.exception.`class`.DuplicatedModelException
+import com.yoong.myissue.exception.`class`.ModelNotFoundException
 import com.yoong.myissue.infra.dto.UpdateResponse
+import jakarta.validation.constraints.Email
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-
+import org.springframework.transaction.annotation.Transactional
 
 
 @Service
+@Transactional
 class TeamService(
     private val teamRepository: TeamRepository,
+    private val memberService: ExternalMemberService,
 ){
 
-    fun createTeam(createTeamRequest: TeamRequest): String {
-        //TODO("유저의 권한이 USER가 아닐 경우 NoAuthenticationException")
-        //TODO("팀 이름이 중복이 될 경우 ModelNotFoundException")
+    private val validAuthentication: ValidAuthentication = ValidAuthentication()
 
-        //TODO("팀 생성 후 유저를 LEADER 로 승격")
-        TODO("팀 생성 후 팀 아이디를 리턴")
+    fun createTeam(createTeamRequest: TeamRequest, email: String): String {
+
+        val member = memberService.searchEmail(email)
+
+        validAuthentication.role(member.getRole(), AuthenticationType.USER)
+
+        if(teamRepository.existsByName(createTeamRequest.name)) throw DuplicatedModelException("팀 명", createTeamRequest.name)
+
+        val team = teamRepository.save(Team(
+            name = createTeamRequest.name,
+        ))
+
+        team.let { member.promotionLeader(it) }
+
+        return "팀이 생성 되었습니다 팀 명 : ${createTeamRequest.name}"
     }
 
-    fun getTeamById(teamId: Long): TeamResponse {
-        //TODO("유저의 권한이 LEADER나 관리자가 아닐 경우 NoAuthenticationException")
-        //TODO("팀 id가 없을 경우 ModelNotFoundException")
-        //TODO("LEADER 가 더미 팀을 선택할 경우 DummyTeamException")
-        TODO("팀 조회 후 리턴 (조회 시 팀의 이슈 및 맴버 조회)")
+    fun getTeamById(teamId: Long, email: String): TeamResponse {
+
+        val member = memberService.searchEmail(email)
+
+        validAuthentication.role(member.getRole(), AuthenticationType.LEADER_AND_ADMIN)
+
+        if(member.getRole() == Role.LEADER && teamId == DUMMY_TEAM) throw DummyTeamException()
+
+        return teamRepository.findByIdOrNull(teamId)?.toTeamResponse() ?: throw ModelNotFoundException("id", teamId.toString())
     }
 
-    fun getTeamList(): List<TeamResponse> {
-        //TODO("유저의 권한이 관리자가 아닐 경우 NoAuthenticationException")
-        TODO("팀 전체 조회 후 리턴 (조회 시 이슈 조회 X)")
+    fun getTeamList(email: String): List<TeamResponse> {
+
+        val member = memberService.searchEmail(email)
+
+        validAuthentication.role(member.getRole(), AuthenticationType.FULL_ACCESS)
+
+        return teamRepository.findAll().map { it.toTeamResponse() }
     }
 
-    fun updateTeam(teamId: Long, updateTeamRequest: TeamRequest): UpdateResponse {
-        //TODO("유저의 권한이 LEADER나 관리자가 아닐 경우 NoAuthenticationException")
-        //TODO("팀 id가 없을 경우 ModelNotFoundException")
-        //TODO(" LEADER가 다른 팀을 업데이트 할 경우 NoAuthenticationException")
-        TODO("변경 사항을 리턴")
+    fun updateTeam(teamId: Long, teamRequest: TeamRequest, email: String): String {
+
+        val member = memberService.searchEmail(email)
+
+        validAuthentication.role(member.getRole(), AuthenticationType.LEADER_AND_ADMIN)
+
+        if(teamId == DUMMY_TEAM) throw DummyTeamException()
+
+        val team = teamRepository.findByIdOrNull(teamId) ?: throw ModelNotFoundException("id", teamId.toString())
+
+        if(member.getRole() == Role.LEADER && team != member.getTeam()) throw IllegalArgumentException()
+
+        team.update(teamRequest)
+
+        teamRepository.save(team)
+
+        return "팀 명 변경이 완료 되었습니다 변경된 팀 명 : ${teamRequest.name}"
     }
 
-    fun deleteTeam(teamId: Long): String {
-        //TODO("유저의 권한이 LEADER나 관리자가 아닐 경우 NoAuthenticationException")
-        //TODO("팀 id가 없을 경우 ModelNotFoundException")
-        //TODO(" LEADER가 다른 팀을 삭제 할 경우 NoAuthenticationException")
+    fun deleteTeam(teamId: Long, email: String): String {
 
-        TODO("Hard DELETE 진행")
+        val member = memberService.searchEmail(email)
+
+        validAuthentication.role(member.getRole(), AuthenticationType.LEADER_AND_ADMIN)
+
+        if(teamId == DUMMY_TEAM) throw DummyTeamException()
+
+        val team = teamRepository.findByIdOrNull(teamId) ?: throw ModelNotFoundException("id", teamId.toString())
+
+        if(member.getRole() == Role.LEADER && team != member.getTeam()) throw IllegalArgumentException()
+
+        teamRepository.delete(team)
+
+        return "삭제가 완료 되었습니다"
+
     }
 }
 

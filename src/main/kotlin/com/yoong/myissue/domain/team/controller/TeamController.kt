@@ -3,10 +3,13 @@ package com.yoong.myissue.domain.team.controller
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.service.TeamService
+import com.yoong.myissue.exception.`class`.InvalidCredentialException
 import com.yoong.myissue.infra.dto.UpdateResponse
-import jakarta.validation.Valid
+import com.yoong.myissue.infra.security.config.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -17,10 +20,12 @@ class TeamController(
 
     @PostMapping
     fun createTeam(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @RequestBody createTeamRequest: TeamRequest
     ): ResponseEntity<String> {
+        if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(teamService.createTeam(createTeamRequest))
+        return ResponseEntity.status(HttpStatus.CREATED).body(teamService.createTeam(createTeamRequest, userPrincipal.email))
     }
 
     @GetMapping("/{teamId}")

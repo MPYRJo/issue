@@ -3,6 +3,7 @@ package com.yoong.myissue.domain.team.entity
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.member.dto.MemberResponse
 import com.yoong.myissue.domain.member.entity.Member
+import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import jakarta.persistence.*
 
@@ -12,18 +13,22 @@ import jakarta.persistence.*
 class Team(
 
     @Column(nullable = false, unique = true)
-    private val name: String,
+    private var name: String,
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
-    private val members: List<Member>,
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, orphanRemoval = false)
+    private val members: List<Member> = listOf(),
 
     @OneToMany(mappedBy = "team", orphanRemoval = true, fetch = FetchType.LAZY)
-    private val issues: List<Issue>
+private val issues: List<Issue> = listOf()
+
+
 ){
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private var id : Long? = null
+
+
 
     fun toTeamResponse(): TeamResponse {
         return TeamResponse(
@@ -35,4 +40,9 @@ class Team(
     }
 
     fun getTeamName() = this.name
+
+    fun update(teamRequest: TeamRequest) {
+
+        name = teamRequest.name
+    }
 }
