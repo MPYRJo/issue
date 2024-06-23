@@ -1,6 +1,6 @@
 package com.yoong.myissue.domain.member.method
 
-import com.yoong.myissue.domain.member.common.PasswordManagement
+import com.yoong.myissue.common.clazz.PasswordManagement
 import com.yoong.myissue.exception.`class`.InvalidCredentialException
 import io.kotest.assertions.throwables.shouldThrow
 import io.mockk.every

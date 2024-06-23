@@ -1,7 +1,7 @@
 package com.yoong.myissue.domain.member.entity
 
 import com.yoong.myissue.domain.issue.enum.Role
-import com.yoong.myissue.domain.member.common.PasswordManagement
+import com.yoong.myissue.common.clazz.PasswordManagement
 import com.yoong.myissue.domain.member.dto.MemberResponse
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.infra.security.jwt.JwtPlugin

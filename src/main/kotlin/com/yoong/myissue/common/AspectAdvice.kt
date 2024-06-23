@@ -1,14 +1,10 @@
 package com.yoong.myissue.common
 
 import com.yoong.myissue.common.annotation.CheckAuthentication
-import com.yoong.myissue.common.`class`.ValidAuthentication
-import com.yoong.myissue.domain.issue.enum.Role
-import com.yoong.myissue.domain.member.entity.Member
+import com.yoong.myissue.common.clazz.ValidAuthentication
 import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.domain.team.service.DUMMY_TEAM
-import com.yoong.myissue.domain.team.service.ExternalTeamService
 import com.yoong.myissue.exception.`class`.DummyTeamException
-import org.apache.juli.logging.LogFactory
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before

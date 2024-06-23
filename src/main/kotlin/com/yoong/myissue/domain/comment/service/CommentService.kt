@@ -1,6 +1,7 @@
 package com.yoong.myissue.domain.comment.service
 
-import com.yoong.myissue.common.`class`.ValidAuthentication
+import com.yoong.myissue.common.annotation.CheckAuthentication
+import com.yoong.myissue.common.clazz.ValidAuthentication
 import com.yoong.myissue.domain.comment.dto.CreateCommentRequest
 import com.yoong.myissue.domain.comment.dto.UpdateCommentRequest
 import com.yoong.myissue.domain.comment.entity.Comment
@@ -22,6 +23,7 @@ class CommentService(
     private val validAuthentication: ValidAuthentication
 ){
 
+    @CheckAuthentication()
     fun createComment(createCommentRequest: CreateCommentRequest, email: String): String {
         val member = memberService.searchEmail(email)
         val issue = issueService.getIssue(createCommentRequest.issueId)

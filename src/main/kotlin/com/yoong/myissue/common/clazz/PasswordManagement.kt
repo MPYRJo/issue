@@ -1,4 +1,4 @@
-package com.yoong.myissue.domain.member.common
+package com.yoong.myissue.common.clazz
 
 import com.yoong.myissue.exception.`class`.InvalidCredentialException
 import com.yoong.myissue.infra.security.jwt.PasswordEncoder
