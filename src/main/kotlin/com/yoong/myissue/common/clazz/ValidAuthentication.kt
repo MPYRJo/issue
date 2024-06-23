@@ -16,8 +16,9 @@ class ValidAuthentication(
 
 
         return when(authenticationType.name){
+            "ALL" ->  true
             "USER" -> if(role == Role.USER) true else throw NoAuthenticationException()
-            "FULL_ACCESS" -> if(role == Role.ADMIN) true else throw NoAuthenticationException()
+            "ADMIN" -> if(role == Role.ADMIN) true else throw NoAuthenticationException()
             "LEADER" -> if(role == Role.LEADER) true else throw NoAuthenticationException()
             "LEADER_AND_ADMIN" -> if(role != Role.USER) true else throw NoAuthenticationException()
             else -> throw IllegalArgumentException("해당 규칙은 존재하지 않습니다")

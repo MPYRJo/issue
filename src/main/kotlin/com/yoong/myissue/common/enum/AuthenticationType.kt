@@ -1,8 +1,9 @@
 package com.yoong.myissue.common.enum
 
 enum class AuthenticationType {
+    ALL,
     USER,
-    FULL_ACCESS,
+    ADMIN,
     LEADER,
     LEADER_AND_ADMIN,
 }

@@ -46,7 +46,7 @@ class TeamService(
         return teamRepository.findByIdOrNull(teamId)?.toTeamResponse() ?: throw ModelNotFoundException("id", teamId.toString())
     }
 
-    @CheckAuthentication(authenticationType = AuthenticationType.FULL_ACCESS)
+    @CheckAuthentication(authenticationType = AuthenticationType.ADMIN)
     fun getTeamList(email: String): List<TeamResponse> {
 
         return teamRepository.findAll().map { it.toTeamResponse() }

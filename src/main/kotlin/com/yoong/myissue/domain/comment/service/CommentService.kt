@@ -2,6 +2,7 @@ package com.yoong.myissue.domain.comment.service
 
 import com.yoong.myissue.common.annotation.CheckAuthentication
 import com.yoong.myissue.common.clazz.ValidAuthentication
+import com.yoong.myissue.common.enum.AuthenticationType
 import com.yoong.myissue.domain.comment.dto.CreateCommentRequest
 import com.yoong.myissue.domain.comment.dto.UpdateCommentRequest
 import com.yoong.myissue.domain.comment.entity.Comment
@@ -23,7 +24,7 @@ class CommentService(
     private val validAuthentication: ValidAuthentication
 ){
 
-    @CheckAuthentication()
+    @CheckAuthentication(AuthenticationType.ALL)
     fun createComment(createCommentRequest: CreateCommentRequest, email: String): String {
         val member = memberService.searchEmail(email)
         val issue = issueService.getIssue(createCommentRequest.issueId)
@@ -38,6 +39,7 @@ class CommentService(
         return "댓글이 등록 되었습니다 이슈 번호 : ${createCommentRequest.issueId}, 코맨트 내용 : ${createCommentRequest.content}"
     }
 
+    @CheckAuthentication(AuthenticationType.ALL)
     fun updateComment(commentId: Long, updateCommentRequest: UpdateCommentRequest, email: String): String {
         val member = memberService.searchEmail(email)
         val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("댓글", commentId.toString())
@@ -47,6 +49,7 @@ class CommentService(
         return "댓글 수정 완료 했습니다"
     }
 
+    @CheckAuthentication(AuthenticationType.ALL)
     fun deleteComment(commentId: Long, email: String): String {
         val member = memberService.searchEmail(email)
         val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("댓글", commentId.toString())
