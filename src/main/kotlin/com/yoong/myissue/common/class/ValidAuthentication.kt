@@ -5,14 +5,19 @@ import com.yoong.myissue.domain.comment.entity.Comment
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.enum.Role
 import com.yoong.myissue.domain.member.entity.Member
+import com.yoong.myissue.domain.member.service.ExternalMemberService
+import com.yoong.myissue.domain.member.service.MemberService
 import com.yoong.myissue.exception.`class`.NoAuthenticationException
+import org.aspectj.lang.annotation.Aspect
+import org.aspectj.lang.annotation.Before
 import org.springframework.stereotype.Component
 
 @Component
-class ValidAuthentication {
-
+class ValidAuthentication(
+){
 
     fun role(role: Role, authenticationType: AuthenticationType):Boolean {
+
 
         return when(authenticationType.name){
             "USER" -> if(role == Role.USER) true else throw NoAuthenticationException()

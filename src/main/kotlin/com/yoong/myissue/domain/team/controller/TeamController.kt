@@ -4,11 +4,9 @@ import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.service.TeamService
 import com.yoong.myissue.exception.`class`.InvalidCredentialException
-import com.yoong.myissue.infra.dto.UpdateResponse
 import com.yoong.myissue.infra.security.config.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -23,6 +21,7 @@ class TeamController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @RequestBody createTeamRequest: TeamRequest
     ): ResponseEntity<String> {
+
         if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
 
         return ResponseEntity.status(HttpStatus.CREATED).body(teamService.createTeam(createTeamRequest, userPrincipal.email))
@@ -30,33 +29,46 @@ class TeamController(
 
     @GetMapping("/{teamId}")
     fun getTeamById(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable teamId: Long,
     ): ResponseEntity<TeamResponse> {
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamById(teamId))
+        if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
+
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamById(teamId, userPrincipal.email))
     }
 
     @GetMapping
-    fun getTeamList(): ResponseEntity<List<TeamResponse>>{
+    fun getTeamList(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
+        ): ResponseEntity<List<TeamResponse>>{
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamList())
+        if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
+
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamList(userPrincipal.email))
     }
 
     @PutMapping("/{teamId}")
     fun updateTeam(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable teamId: Long,
         @RequestBody updateTeamRequest: TeamRequest
-    ):ResponseEntity<UpdateResponse>{
+    ):ResponseEntity<String>{
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.updateTeam(teamId, updateTeamRequest))
+        if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
+
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.updateTeam(teamId, updateTeamRequest, userPrincipal.email))
     }
 
 
     @DeleteMapping("/{teamId}")
     fun deleteTeam(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable teamId: Long,
     ): ResponseEntity<String>{
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(teamService.deleteTeam(teamId))
+        if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(teamService.deleteTeam(teamId, userPrincipal.email))
     }
 }

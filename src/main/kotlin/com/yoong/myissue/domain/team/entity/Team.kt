@@ -19,7 +19,7 @@ class Team(
     private val members: List<Member> = listOf(),
 
     @OneToMany(mappedBy = "team", orphanRemoval = true, fetch = FetchType.LAZY)
-private val issues: List<Issue> = listOf()
+    private val issues: List<Issue> = listOf()
 
 
 ){
