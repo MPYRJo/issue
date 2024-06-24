@@ -1,4 +1,4 @@
-package com.yoong.myissue.domain.comment.enum
+package com.yoong.myissue.domain.comment.enumGather
 
 enum class CheckingStatus {
     FEEDBACK,

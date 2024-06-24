@@ -1,6 +1,6 @@
 package com.yoong.myissue.domain.member.dto
 
-import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.domain.issue.enumGather.Role
 
 data class MemberResponse(
     val id: Long,

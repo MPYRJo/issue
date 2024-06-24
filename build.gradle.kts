@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm") version "1.9.24"
     kotlin("plugin.spring") version "1.9.24"
     kotlin("plugin.jpa") version "1.4.32"
+    kotlin("kapt") version "1.9.24"
 }
 
 group = "com.yoong"
@@ -27,6 +28,8 @@ repositories {
 
 val kotestVersion = "5.5.5"
 val mockkVersion = "1.13.8"
+val queryDslVersion = "5.1.0"
+
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -43,6 +46,8 @@ dependencies {
     implementation ("org.springframework.security:spring-security-core")
     implementation ("org.springframework.security:spring-security-web")
     implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("com.querydsl:querydsl-jpa:$queryDslVersion:jakarta")
+    kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
 
 
     runtimeOnly("org.postgresql:postgresql")

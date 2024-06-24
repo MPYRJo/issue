@@ -1,6 +1,6 @@
 package com.yoong.myissue.domain.comment.dto
 
-import com.yoong.myissue.domain.comment.enum.CheckingStatus
+import com.yoong.myissue.domain.comment.enumGather.CheckingStatus
 
 data class CreateCommentRequest(
     val issueId: Long,

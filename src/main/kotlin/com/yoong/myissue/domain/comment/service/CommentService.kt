@@ -2,7 +2,7 @@ package com.yoong.myissue.domain.comment.service
 
 import com.yoong.myissue.common.annotationGather.CheckAuthentication
 import com.yoong.myissue.common.clazz.ValidAuthentication
-import com.yoong.myissue.common.enum.AuthenticationType
+import com.yoong.myissue.common.enumGather.AuthenticationType
 import com.yoong.myissue.domain.comment.dto.CreateCommentRequest
 import com.yoong.myissue.domain.comment.dto.UpdateCommentRequest
 import com.yoong.myissue.domain.comment.entity.Comment

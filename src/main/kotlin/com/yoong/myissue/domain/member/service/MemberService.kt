@@ -1,6 +1,6 @@
 package com.yoong.myissue.domain.member.service
 
-import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.domain.issue.enumGather.Role
 import com.yoong.myissue.common.clazz.PasswordManagement
 import com.yoong.myissue.domain.member.dto.LoginRequest
 import com.yoong.myissue.domain.member.dto.LoginResponse

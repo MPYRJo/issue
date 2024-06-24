@@ -1,9 +1,9 @@
 package com.yoong.myissue.common.clazz
 
-import com.yoong.myissue.common.enum.AuthenticationType
+import com.yoong.myissue.common.enumGather.AuthenticationType
 import com.yoong.myissue.domain.comment.entity.Comment
 import com.yoong.myissue.domain.issue.entity.Issue
-import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.domain.issue.enumGather.Role
 import com.yoong.myissue.domain.member.entity.Member
 import com.yoong.myissue.exception.clazz.NoAuthenticationException
 import org.springframework.stereotype.Component

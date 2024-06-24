@@ -1,8 +1,8 @@
 package com.yoong.myissue.domain.team.service
 
 import com.yoong.myissue.common.annotationGather.*
-import com.yoong.myissue.common.enum.AuthenticationType
-import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.common.enumGather.AuthenticationType
+import com.yoong.myissue.domain.issue.enumGather.Role
 import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse

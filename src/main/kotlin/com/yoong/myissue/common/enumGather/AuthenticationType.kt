@@ -1,4 +1,4 @@
-package com.yoong.myissue.common.enum
+package com.yoong.myissue.common.enumGather
 
 enum class AuthenticationType {
     ALL,

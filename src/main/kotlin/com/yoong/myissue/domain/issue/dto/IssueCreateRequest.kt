@@ -1,7 +1,7 @@
 package com.yoong.myissue.domain.issue.dto
 
-import com.yoong.myissue.domain.issue.enum.Priority
-import com.yoong.myissue.domain.issue.enum.WorkingStatus
+import com.yoong.myissue.domain.issue.enumGather.Priority
+import com.yoong.myissue.domain.issue.enumGather.WorkingStatus
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 

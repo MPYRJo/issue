@@ -1,13 +1,8 @@
 package com.yoong.myissue.domain.issue.dto
 
 import com.yoong.myissue.domain.comment.dto.CommentResponse
-import com.yoong.myissue.domain.comment.entity.Comment
-import com.yoong.myissue.domain.issue.entity.Issue
-import com.yoong.myissue.domain.issue.enum.Priority
-import com.yoong.myissue.domain.issue.enum.WorkingStatus
-import com.yoong.myissue.domain.member.dto.MemberResponse
-import com.yoong.myissue.domain.member.entity.Member
-import com.yoong.myissue.domain.team.dto.TeamResponse
+import com.yoong.myissue.domain.issue.enumGather.Priority
+import com.yoong.myissue.domain.issue.enumGather.WorkingStatus
 import java.time.LocalDateTime
 
 data class IssueResponse (

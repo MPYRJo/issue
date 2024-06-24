@@ -2,7 +2,7 @@ package com.yoong.myissue.domain.comment.entity
 
 import com.yoong.myissue.domain.comment.dto.CommentResponse
 import com.yoong.myissue.domain.comment.dto.UpdateCommentRequest
-import com.yoong.myissue.domain.comment.enum.CheckingStatus
+import com.yoong.myissue.domain.comment.enumGather.CheckingStatus
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.member.entity.Member
 import jakarta.persistence.*

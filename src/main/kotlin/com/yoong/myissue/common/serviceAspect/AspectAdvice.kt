@@ -2,7 +2,7 @@ package com.yoong.myissue.common.serviceAspect
 
 import com.yoong.myissue.common.annotationGather.CheckAuthentication
 import com.yoong.myissue.common.clazz.ValidAuthentication
-import com.yoong.myissue.domain.issue.enum.Role
+import com.yoong.myissue.domain.issue.enumGather.Role
 import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.domain.team.service.DUMMY_TEAM
 import com.yoong.myissue.domain.team.service.ExternalTeamService

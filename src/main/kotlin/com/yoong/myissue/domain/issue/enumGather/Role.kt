@@ -1,4 +1,4 @@
-package com.yoong.myissue.domain.issue.enum
+package com.yoong.myissue.domain.issue.enumGather
 
 enum class Role {
     USER,

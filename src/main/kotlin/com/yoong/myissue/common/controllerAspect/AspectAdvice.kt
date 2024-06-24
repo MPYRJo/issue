@@ -1,7 +1,6 @@
 package com.yoong.myissue.common.controllerAspect
 
 import com.yoong.myissue.exception.clazz.InvalidCredentialException
-import com.yoong.myissue.exception.clazz.NoAuthenticationException
 import com.yoong.myissue.infra.security.config.UserPrincipal
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.Aspect
