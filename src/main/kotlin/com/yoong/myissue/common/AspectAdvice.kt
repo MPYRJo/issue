@@ -1,6 +1,6 @@
 package com.yoong.myissue.common
 
-import com.yoong.myissue.common.annotation.CheckAuthentication
+import com.yoong.myissue.common.annotationGather.CheckAuthentication
 import com.yoong.myissue.common.clazz.ValidAuthentication
 import com.yoong.myissue.domain.issue.enum.Role
 import com.yoong.myissue.domain.member.service.ExternalMemberService
@@ -23,7 +23,7 @@ class AspectAdvice(
     private val teamService: ExternalTeamService
 ) {
 
-    @Before("@annotation(com.yoong.myissue.common.annotation.CheckAuthentication)")
+    @Before("@annotation(com.yoong.myissue.common.annotationGather.CheckAuthentication)")
     fun checkAuthentication(joinPoint: JoinPoint) {
         val methodSignature = joinPoint.signature as MethodSignature
         val method = methodSignature.method
@@ -36,7 +36,7 @@ class AspectAdvice(
         validAuthentication.role(member.getRole(), authenticationType)
     }
 
-    @Before("@annotation(com.yoong.myissue.common.annotation.CheckDummyTeam)")
+    @Before("@annotation(com.yoong.myissue.common.annotationGather.CheckDummyTeam)")
     fun checkDummyTeam(joinPoint: JoinPoint) {
 
         val teamId = joinPoint.args[0] as Long
@@ -44,7 +44,7 @@ class AspectAdvice(
         if (teamId == DUMMY_TEAM) throw DummyTeamException()
     }
 
-    @Before("@annotation(com.yoong.myissue.common.annotation.LeaderChoosesOtherTeam)")
+    @Before("@annotation(com.yoong.myissue.common.annotationGather.LeaderChoosesOtherTeam)")
     fun leaderChoosesOtherTeam(joinPoint: JoinPoint) {
 
         val teamId = joinPoint.args[0] as Long
@@ -57,7 +57,7 @@ class AspectAdvice(
 
     }
 
-    @Before("@annotation(com.yoong.myissue.common.annotation.CheckUser)")
+    @Before("@annotation(com.yoong.myissue.common.annotationGather.CheckUser)")
     fun checkUser(joinPoint: JoinPoint){
         val memberId = joinPoint.args[0] as Long
         val member = memberService.searchId(memberId)
@@ -65,7 +65,7 @@ class AspectAdvice(
         if(member.getRole() != Role.USER) throw IllegalArgumentException("리더 및 관리자는 팀원으로 추가 및 방출할 수 없습니다")
     }
 
-    @Before("@annotation(com.yoong.myissue.common.annotation.CheckMine)")
+    @Before("@annotation(com.yoong.myissue.common.annotationGather.CheckMine)")
     fun checkMine(joinPoint: JoinPoint){
         val memberId = joinPoint.args[0] as Long
         val leaderEmail = joinPoint.args[1] as String

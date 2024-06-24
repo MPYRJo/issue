@@ -10,6 +10,7 @@ import com.yoong.myissue.exception.clazz.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Transactional
 @Service
@@ -48,7 +49,7 @@ class IssueService(
     }
 
     @Transactional(readOnly = true)
-    fun getIssueList(): List<IssueResponse> {
+    fun getIssueList(title: String?, description: String?, nickName: String?, startDate: LocalDateTime?, email: String): List<IssueResponse> {
 
         val issueList = issueRepository.findAll().sortedByDescending { it.getCreatedAt() }
 

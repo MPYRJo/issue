@@ -1,4 +1,4 @@
-package com.yoong.myissue.common.annotation
+package com.yoong.myissue.common.annotationGather
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

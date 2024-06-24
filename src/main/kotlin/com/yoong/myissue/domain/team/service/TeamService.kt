@@ -1,10 +1,9 @@
 package com.yoong.myissue.domain.team.service
 
-import com.yoong.myissue.common.annotation.*
+import com.yoong.myissue.common.annotationGather.*
 import com.yoong.myissue.common.enum.AuthenticationType
 import com.yoong.myissue.domain.issue.enum.Role
 import com.yoong.myissue.domain.member.service.ExternalMemberService
-import com.yoong.myissue.domain.team.dto.TeamAdminInviteRequest
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.entity.Team
@@ -43,12 +42,14 @@ class TeamService(
 
     @CheckAuthentication(authenticationType = AuthenticationType.LEADER_AND_ADMIN)
     @CheckDummyTeam
+    @Transactional(readOnly = true)
     fun getTeamById(teamId: Long, email: String): TeamResponse {
 
         return teamRepository.findByIdOrNull(teamId)?.toTeamResponse() ?: throw ModelNotFoundException("id", teamId.toString())
     }
 
     @CheckAuthentication(authenticationType = AuthenticationType.ADMIN)
+    @Transactional(readOnly = true)
     fun getTeamList(email: String): List<TeamResponse> {
 
         return teamRepository.findAll().map { it.toTeamResponse() }

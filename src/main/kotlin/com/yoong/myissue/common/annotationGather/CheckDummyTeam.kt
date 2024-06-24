@@ -1,6 +1,4 @@
-package com.yoong.myissue.common.annotation
-
-import com.yoong.myissue.domain.team.service.DUMMY_TEAM
+package com.yoong.myissue.common.annotationGather
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

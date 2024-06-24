@@ -1,4 +1,4 @@
-package com.yoong.myissue.common.annotation
+package com.yoong.myissue.common.annotationGather
 
 import com.yoong.myissue.common.enum.AuthenticationType
 

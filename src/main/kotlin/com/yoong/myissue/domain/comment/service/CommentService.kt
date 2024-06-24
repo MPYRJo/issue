@@ -1,6 +1,6 @@
 package com.yoong.myissue.domain.comment.service
 
-import com.yoong.myissue.common.annotation.CheckAuthentication
+import com.yoong.myissue.common.annotationGather.CheckAuthentication
 import com.yoong.myissue.common.clazz.ValidAuthentication
 import com.yoong.myissue.common.enum.AuthenticationType
 import com.yoong.myissue.domain.comment.dto.CreateCommentRequest
