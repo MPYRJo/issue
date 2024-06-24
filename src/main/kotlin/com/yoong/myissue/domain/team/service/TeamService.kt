@@ -5,6 +5,7 @@ import com.yoong.myissue.common.annotation.CheckDummyTeam
 import com.yoong.myissue.common.enum.AuthenticationType
 import com.yoong.myissue.domain.issue.enum.Role
 import com.yoong.myissue.domain.member.service.ExternalMemberService
+import com.yoong.myissue.domain.team.dto.TeamAdminInviteRequest
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.entity.Team
@@ -82,6 +83,26 @@ class TeamService(
         teamRepository.delete(team)
 
         return "삭제가 완료 되었습니다"
+    }
+
+    fun inviteTeam(userId: Long, email: String): String {
+        //TODO("권한이 리더가 아닐 경우 NoAuthenticationException")
+        //TODO("팀원의 아이디가 없을 경우 ModelNotFoundException")
+        //TODO("팀원의 아이디가 1번이 아닐 경우 IllegalArgumentException")
+        TODO("팀원의 팀을 리더의 팀과 일치 시킨 후에 정보를 리턴")
+    }
+
+    fun inviteMemberByAdmin(teamAdminInviteRequest: TeamAdminInviteRequest, email: String): String? {
+        //TODO("권한이 관리자가 아닐 경우 NoAuthenticationException")
+        //TODO("팀원의 아이디가 없을 경우 ModelNotFoundException")
+        //TODO("팀 id가 DUMMY_TEAM 일 경우 DummyTeamException")
+        TODO("팀원의 팀을 가져온 팀 정보의 팀과 일치 시킨 후에 정보를 리턴")
+    }
+
+    fun firedMember(memberId: Long, email: String): String? {
+        //TODO("권한이 리더나 관리자가 아닐 경우 NoAuthenticationException")
+        //TODO("팀원의 아이디가 없을 경우 ModelNotFoundException")
+        TODO("팀원의 팀을 가져온 DUMMY_TEAM 팀과 일치 시킨 후에 정보를 리턴")
     }
 
 

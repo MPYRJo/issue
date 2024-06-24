@@ -1,5 +1,6 @@
 package com.yoong.myissue.domain.team.controller
 
+import com.yoong.myissue.domain.team.dto.TeamAdminInviteRequest
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.service.TeamService
@@ -79,17 +80,17 @@ class TeamController(
     ): ResponseEntity<String>{
         if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.inviteTeam(teamId, userPrincipal.email))
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.inviteTeam(memberId, userPrincipal.email))
     }
 
-    @PatchMapping("/invite/admin/{memberId}")
+    @PatchMapping("/invite/admin")
     fun inviteMemberByAdmin(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
-        @PathVariable memberId: Long,
+        @RequestBody teamAdminInviteRequest: TeamAdminInviteRequest
     ): ResponseEntity<String>{
         if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.inviteMemberByAdmin(teamId, userPrincipal.email))
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.inviteMemberByAdmin(teamAdminInviteRequest, userPrincipal.email))
     }
 
     @DeleteMapping("/fired/{memberId}")
@@ -99,6 +100,6 @@ class TeamController(
     ): ResponseEntity<String>{
         if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.firedMember(teamId, userPrincipal.email))
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.firedMember(memberId, userPrincipal.email))
     }
 }
