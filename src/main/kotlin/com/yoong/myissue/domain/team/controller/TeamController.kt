@@ -58,7 +58,7 @@ class TeamController(
 
         if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.updateTeam(teamId, updateTeamRequest, userPrincipal.email))
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.updateTeam(teamId, userPrincipal.email, updateTeamRequest))
     }
 
 
@@ -90,7 +90,10 @@ class TeamController(
     ): ResponseEntity<String>{
         if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.inviteMemberByAdmin(teamAdminInviteRequest, userPrincipal.email))
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(
+                teamService.inviteMemberByAdmin(teamAdminInviteRequest.memberId, userPrincipal.email,teamAdminInviteRequest.teamId
+                ))
     }
 
     @DeleteMapping("/fired/{memberId}")

@@ -1,7 +1,6 @@
 package com.yoong.myissue.domain.team.service
 
-import com.yoong.myissue.common.annotation.CheckAuthentication
-import com.yoong.myissue.common.annotation.CheckDummyTeam
+import com.yoong.myissue.common.annotation.*
 import com.yoong.myissue.common.enum.AuthenticationType
 import com.yoong.myissue.domain.issue.enum.Role
 import com.yoong.myissue.domain.member.service.ExternalMemberService
@@ -10,6 +9,7 @@ import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.domain.team.repository.TeamRepository
+import com.yoong.myissue.exception.clazz.DummyTeamException
 import com.yoong.myissue.exception.clazz.DuplicatedModelException
 import com.yoong.myissue.exception.clazz.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull
@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional
 class TeamService(
     private val teamRepository: TeamRepository,
     private val memberService: ExternalMemberService,
+    private val externalTeamService: ExternalTeamService
 ){
 
     @CheckAuthentication(authenticationType = AuthenticationType.USER)
@@ -54,14 +55,11 @@ class TeamService(
     }
 
     @CheckAuthentication(authenticationType = AuthenticationType.LEADER_AND_ADMIN)
+    @LeaderChoosesOtherTeam
     @CheckDummyTeam
-    fun updateTeam(teamId: Long, teamRequest: TeamRequest, email: String): String {
-
-        val member = memberService.searchEmail(email)
+    fun updateTeam(teamId: Long, email: String, teamRequest: TeamRequest): String {
 
         val team = teamRepository.findByIdOrNull(teamId) ?: throw ModelNotFoundException("id", teamId.toString())
-
-        if(member.getRole() == Role.LEADER && team != member.getTeam()) throw IllegalArgumentException()
 
         team.update(teamRequest)
 
@@ -71,14 +69,11 @@ class TeamService(
     }
 
     @CheckAuthentication(authenticationType = AuthenticationType.LEADER_AND_ADMIN)
+    @LeaderChoosesOtherTeam
     @CheckDummyTeam
     fun deleteTeam(teamId: Long, email: String): String {
 
-        val member = memberService.searchEmail(email)
-
         val team = teamRepository.findByIdOrNull(teamId) ?: throw ModelNotFoundException("id", teamId.toString())
-
-        if(member.getRole() == Role.LEADER && team != member.getTeam()) throw IllegalArgumentException()
 
         teamRepository.delete(team)
 
@@ -86,9 +81,11 @@ class TeamService(
     }
 
     @CheckAuthentication(authenticationType = AuthenticationType.LEADER)
-    fun inviteTeam(userId: Long, email: String): String {
+    @CheckUser
+    @CheckMine
+    fun inviteTeam(memberId: Long, email: String): String {
 
-        val member = memberService.searchId(userId)
+        val member = memberService.searchId(memberId)
         val leader = memberService.searchEmail(email)
 
         when(member.getTeam().getId()){
@@ -100,17 +97,44 @@ class TeamService(
         return "새로운 팀 원이 등록 되었습니다"
     }
 
-    fun inviteMemberByAdmin(teamAdminInviteRequest: TeamAdminInviteRequest, email: String): String? {
-        //TODO("권한이 관리자가 아닐 경우 NoAuthenticationException")
-        //TODO("팀원의 아이디가 없을 경우 ModelNotFoundException")
-        //TODO("팀 id가 DUMMY_TEAM 일 경우 DummyTeamException")
-        TODO("팀원의 팀을 가져온 팀 정보의 팀과 일치 시킨 후에 정보를 리턴")
+    @CheckAuthentication(authenticationType = AuthenticationType.ADMIN)
+    @CheckUser
+    @CheckMine
+    fun inviteMemberByAdmin(memberId: Long, email: String, teamId: Long): String {
+
+        val member = memberService.searchId(memberId)
+
+        val team = externalTeamService.getTeamById(teamId)
+
+        if (teamId == DUMMY_TEAM) throw DummyTeamException()
+
+        when(member.getTeam()){
+            team -> throw IllegalArgumentException("이미 현재 팀에 소속 되어 있습니다")
+            else -> member.updateTeam(team)
+        }
+
+        return "새로운 팀 원이 ${team.getTeamName()} 팀에 등록 되었습니다"
     }
 
+    @CheckAuthentication(authenticationType = AuthenticationType.LEADER_AND_ADMIN)
+    @CheckUser
+    @CheckMine
     fun firedMember(memberId: Long, email: String): String? {
-        //TODO("권한이 리더나 관리자가 아닐 경우 NoAuthenticationException")
-        //TODO("팀원의 아이디가 없을 경우 ModelNotFoundException")
-        TODO("팀원의 팀을 가져온 DUMMY_TEAM 팀과 일치 시킨 후에 정보를 리턴")
+
+        val dummyTeam = externalTeamService.getDummyTeam()
+        val member = memberService.searchId(memberId)
+        val leader = memberService.searchEmail(email)
+
+        if(leader.getRole() == Role.LEADER){
+            when(member.getTeam()){
+                leader.getTeam() -> member.updateTeam(dummyTeam)
+                else -> throw IllegalArgumentException("다른 팀 소속 입니다")
+            }
+        }else{
+            member.updateTeam(dummyTeam)
+        }
+
+        return "팀 원 그룹 탈퇴 처리 완료 했습니다"
     }
 
 
