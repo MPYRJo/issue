@@ -62,4 +62,8 @@ class Member (
         this.team = team
         role = Role.LEADER
     }
+
+    fun updateTeam(team: Team) {
+        this.team = team
+    }
 }

@@ -85,11 +85,18 @@ class TeamService(
         return "삭제가 완료 되었습니다"
     }
 
+    @CheckAuthentication(authenticationType = AuthenticationType.LEADER)
     fun inviteTeam(userId: Long, email: String): String {
-        //TODO("권한이 리더가 아닐 경우 NoAuthenticationException")
-        //TODO("팀원의 아이디가 없을 경우 ModelNotFoundException")
-        //TODO("팀원의 아이디가 1번이 아닐 경우 IllegalArgumentException")
-        TODO("팀원의 팀을 리더의 팀과 일치 시킨 후에 정보를 리턴")
+
+        val member = memberService.searchId(userId)
+        val leader = memberService.searchEmail(email)
+
+        when(member.getTeam().getId()){
+            DUMMY_TEAM -> member.updateTeam(leader.getTeam())
+            else -> throw IllegalArgumentException()
+        }
+
+        return "새로운 팀 원이 등록 되었습니다"
     }
 
     fun inviteMemberByAdmin(teamAdminInviteRequest: TeamAdminInviteRequest, email: String): String? {

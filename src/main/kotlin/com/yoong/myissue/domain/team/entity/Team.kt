@@ -39,6 +39,7 @@ class Team(
         )
     }
 
+    fun getId() = id
     fun getTeamName() = this.name
 
     fun update(teamRequest: TeamRequest) {
