@@ -3,6 +3,7 @@ package com.yoong.myissue.domain.member.method
 import com.yoong.myissue.common.clazz.PasswordManagement
 import com.yoong.myissue.exception.clazz.InvalidCredentialException
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import kotlin.test.Test
@@ -16,8 +17,11 @@ class MemberMethodTest {
         val password = "test"
         val password2 = "test2"
 
-        every { passwordManagement.isSame(any(), any()) } throws InvalidCredentialException()
+        every { passwordManagement.isSame(any(), any()) } throws InvalidCredentialException("비밀번호")
 
         shouldThrow<InvalidCredentialException> { passwordManagement.isSame(password, password2) }
+            .let {
+                it.message shouldBe "비밀번호"
+            }
     }
 }

@@ -10,6 +10,7 @@ import com.yoong.myissue.exception.clazz.DummyTeamException
 import com.yoong.myissue.exception.clazz.DuplicatedModelException
 import com.yoong.myissue.exception.clazz.IllegalArgumentException
 import org.aspectj.lang.JoinPoint
+import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.reflect.MethodSignature

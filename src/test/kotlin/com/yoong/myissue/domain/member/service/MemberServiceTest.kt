@@ -7,8 +7,10 @@ import com.yoong.myissue.domain.member.entity.Member
 import com.yoong.myissue.domain.member.repository.MemberRepository
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.domain.team.repository.TeamRepository
+import com.yoong.myissue.domain.team.service.ExternalTeamService
 import com.yoong.myissue.domain.team.service.TeamService
 import com.yoong.myissue.infra.security.jwt.JwtPlugin
+import com.yoong.myissue.infra.security.jwt.PasswordEncoder
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
@@ -17,16 +19,20 @@ import org.springframework.data.repository.findByIdOrNull
 
 class MemberServiceTest {
 
-    private val memberRepository = mockk<MemberRepository>()
-    private val teamRepository = mockk<TeamRepository>()
-    private val teamService = TeamService(teamRepository)
-    private val passwordManagement = mockk<PasswordManagement>()
-    private val jwtPlugin = mockk<JwtPlugin>()
-    private val memberService = MemberService(memberRepository, teamService, passwordManagement, jwtPlugin)
 
+    private val memberRepository = mockk<MemberRepository>()
+    private val externalMemberService = ExternalMemberService(memberRepository)
+    private val teamRepository = mockk<TeamRepository>()
+    private val externalTeamService = ExternalTeamService(teamRepository)
+    private val passwordEncoder = PasswordEncoder()
+    private val passwordManagement = PasswordManagement(passwordEncoder)
+    private val jwtPlugin = mockk<JwtPlugin>()
+    private val memberService = MemberService(memberRepository, externalTeamService, passwordManagement, jwtPlugin)
+    private val teamService = TeamService(teamRepository, externalMemberService, externalTeamService)
 
     @Test
     fun `정상적으로 SingUp 이 되었을 경우 "회원 가입이 완료 되었습니다!!" 를 반환`(){
+
         val signupRequest = SignupRequest(
             nickname = "test",
             email = "test@test.com",
@@ -34,7 +40,7 @@ class MemberServiceTest {
             password2 = "test"
         )
 
-        var team = Team(
+        val team = Team(
             name="test",
             issues = mutableListOf(),
             members = mutableListOf(),
@@ -43,10 +49,10 @@ class MemberServiceTest {
         every { memberRepository.existsByEmail(any()) } returns false
         every { memberRepository.existsByNickname(any()) } returns false
         every { teamRepository.findByIdOrNull(any()) } answers {
-            team.id = 1L
+            team.getId()
             team
         }
-        every { passwordManagement.isSame(any(), any()) }returns Unit
+        passwordManagement.isSame(signupRequest.password,signupRequest.password2)
 
         every { memberRepository.save(any()) }returns Member(
             nickname = "test",
