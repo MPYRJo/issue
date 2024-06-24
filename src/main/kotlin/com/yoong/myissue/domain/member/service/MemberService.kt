@@ -8,8 +8,8 @@ import com.yoong.myissue.domain.member.dto.SignupRequest
 import com.yoong.myissue.domain.member.entity.Member
 import com.yoong.myissue.domain.member.repository.MemberRepository
 import com.yoong.myissue.domain.team.service.ExternalTeamService
-import com.yoong.myissue.exception.`class`.DuplicatedModelException
-import com.yoong.myissue.exception.`class`.InvalidCredentialException
+import com.yoong.myissue.exception.clazz.DuplicatedModelException
+import com.yoong.myissue.exception.clazz.InvalidCredentialException
 import com.yoong.myissue.infra.security.jwt.JwtPlugin
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service

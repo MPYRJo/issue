@@ -4,7 +4,7 @@ import com.yoong.myissue.common.annotation.CheckAuthentication
 import com.yoong.myissue.common.clazz.ValidAuthentication
 import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.domain.team.service.DUMMY_TEAM
-import com.yoong.myissue.exception.`class`.DummyTeamException
+import com.yoong.myissue.exception.clazz.DummyTeamException
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before

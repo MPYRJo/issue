@@ -4,7 +4,7 @@ import com.yoong.myissue.domain.team.dto.TeamAdminInviteRequest
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.service.TeamService
-import com.yoong.myissue.exception.`class`.InvalidCredentialException
+import com.yoong.myissue.exception.clazz.InvalidCredentialException
 import com.yoong.myissue.infra.security.config.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

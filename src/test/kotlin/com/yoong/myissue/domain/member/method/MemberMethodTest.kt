@@ -1,7 +1,7 @@
 package com.yoong.myissue.domain.member.method
 
 import com.yoong.myissue.common.clazz.PasswordManagement
-import com.yoong.myissue.exception.`class`.InvalidCredentialException
+import com.yoong.myissue.exception.clazz.InvalidCredentialException
 import io.kotest.assertions.throwables.shouldThrow
 import io.mockk.every
 import io.mockk.mockk

@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import com.yoong.myissue.domain.comment.dto.*
 import com.yoong.myissue.domain.comment.service.CommentService
-import com.yoong.myissue.exception.`class`.NoAuthenticationException
+import com.yoong.myissue.exception.clazz.NoAuthenticationException
 import com.yoong.myissue.infra.security.config.UserPrincipal
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal

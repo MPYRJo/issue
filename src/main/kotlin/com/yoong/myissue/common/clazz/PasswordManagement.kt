@@ -1,6 +1,6 @@
 package com.yoong.myissue.common.clazz
 
-import com.yoong.myissue.exception.`class`.InvalidCredentialException
+import com.yoong.myissue.exception.clazz.InvalidCredentialException
 import com.yoong.myissue.infra.security.jwt.PasswordEncoder
 import org.springframework.stereotype.Component
 

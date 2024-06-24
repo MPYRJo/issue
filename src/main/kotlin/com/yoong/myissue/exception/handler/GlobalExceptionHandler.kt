@@ -1,6 +1,6 @@
 package com.yoong.myissue.exception.handler
 
-import com.yoong.myissue.exception.`class`.*
+import com.yoong.myissue.exception.clazz.*
 import com.yoong.myissue.exception.dto.ErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

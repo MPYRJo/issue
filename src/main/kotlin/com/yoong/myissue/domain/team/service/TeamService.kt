@@ -10,8 +10,8 @@ import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.domain.team.repository.TeamRepository
-import com.yoong.myissue.exception.`class`.DuplicatedModelException
-import com.yoong.myissue.exception.`class`.ModelNotFoundException
+import com.yoong.myissue.exception.clazz.DuplicatedModelException
+import com.yoong.myissue.exception.clazz.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -93,7 +93,8 @@ class TeamService(
 
         when(member.getTeam().getId()){
             DUMMY_TEAM -> member.updateTeam(leader.getTeam())
-            else -> throw IllegalArgumentException()
+            leader.getTeam().getId() -> throw IllegalArgumentException("리더와 동일한 팀 소속 입니다")
+            else -> throw IllegalArgumentException("다른 팀 소속 입니다")
         }
 
         return "새로운 팀 원이 등록 되었습니다"

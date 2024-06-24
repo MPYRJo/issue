@@ -3,19 +3,16 @@ package com.yoong.myissue.domain.issue.controller
 import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
-import com.yoong.myissue.infra.dto.UpdateResponse
 import com.yoong.myissue.domain.issue.service.IssueService
-import com.yoong.myissue.exception.`class`.NoAuthenticationException
+import com.yoong.myissue.exception.clazz.NoAuthenticationException
 import com.yoong.myissue.infra.security.config.UserPrincipal
 import jakarta.validation.Valid
-import org.springframework.boot.context.properties.bind.BindResult
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDateTime
 
 

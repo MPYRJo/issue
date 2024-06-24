@@ -6,7 +6,7 @@ import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.repository.IssueRepository
 import com.yoong.myissue.domain.member.service.ExternalMemberService
-import com.yoong.myissue.exception.`class`.ModelNotFoundException
+import com.yoong.myissue.exception.clazz.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
