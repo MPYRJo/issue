@@ -3,6 +3,7 @@ package com.yoong.myissue.domain.issue.service
 import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
+import com.yoong.myissue.domain.issue.dto.SearchIssueListRequest
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.repository.IssueRepository
 import com.yoong.myissue.domain.member.service.ExternalMemberService
@@ -10,6 +11,7 @@ import com.yoong.myissue.exception.clazz.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.ModelAttribute
 import java.time.LocalDateTime
 
 @Transactional
@@ -49,9 +51,17 @@ class IssueService(
     }
 
     @Transactional(readOnly = true)
-    fun getIssueList(title: String?, description: String?, nickName: String?, startDate: LocalDateTime?, email: String): List<IssueResponse> {
+    fun getIssueList(
+        searchIssueListRequest: SearchIssueListRequest,
+        email: String
+    ): List<IssueResponse> {
 
-        val issueList = issueRepository.findAll().sortedByDescending { it.getCreatedAt() }
+        val issueList = issueRepository.findAll(
+            searchIssueListRequest.topic,
+            searchIssueListRequest.content,
+            searchIssueListRequest.asc,
+            searchIssueListRequest.orderBy
+        )
 
         return issueList.map { it.toIssueResponse() }
     }

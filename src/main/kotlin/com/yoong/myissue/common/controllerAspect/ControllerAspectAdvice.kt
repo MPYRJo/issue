@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 
 @Aspect
 @Component
-class AspectAdvice {
+class ControllerAspectAdvice {
 
     @Before("@annotation(com.yoong.myissue.common.annotationGather.FailedLogin)")
     fun failedLogin(joinPoint: JoinPoint) {

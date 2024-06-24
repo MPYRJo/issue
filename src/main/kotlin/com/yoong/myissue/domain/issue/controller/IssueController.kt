@@ -3,7 +3,9 @@ package com.yoong.myissue.domain.issue.controller
 import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
+import com.yoong.myissue.domain.issue.dto.SearchIssueListRequest
 import com.yoong.myissue.domain.issue.service.IssueService
+import com.yoong.myissue.exception.clazz.IllegalArgumentException
 import com.yoong.myissue.exception.clazz.InvalidCredentialException
 import com.yoong.myissue.exception.clazz.NoAuthenticationException
 import com.yoong.myissue.infra.security.config.UserPrincipal
@@ -13,7 +15,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
 
 
 @RestController
@@ -48,14 +49,11 @@ class IssueController(
     @GetMapping()
     fun getIssueList(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
-        @RequestParam(required = false,) title: String?,
-        @RequestParam(required = false,) description: String?,
-        @RequestParam(required = false,) nickName: String?,
-        @RequestParam(required = false,) startDate: LocalDateTime?,
+        @ModelAttribute searchIssueListRequest: SearchIssueListRequest,
     ): ResponseEntity<List<IssueResponse>>{
         if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
 
-        return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssueList(title, description, nickName, startDate, userPrincipal.email))
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssueList(searchIssueListRequest, userPrincipal.email))
     }
 
     @PutMapping("/{issueId}")
