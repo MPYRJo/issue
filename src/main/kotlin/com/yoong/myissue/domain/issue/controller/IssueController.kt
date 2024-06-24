@@ -38,6 +38,7 @@ class IssueController(
 
     @GetMapping("/{issueId}")
     fun getIssue(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable("issueId") issueId: Long,
     ): ResponseEntity<IssueResponse>{
 
@@ -59,6 +60,7 @@ class IssueController(
 
     @PutMapping("/{issueId}")
     fun updateIssue(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable("issueId") issueId: Long,
         @RequestBody issueUpdateRequest : IssueUpdateRequest
     ): ResponseEntity<String>{
@@ -68,6 +70,7 @@ class IssueController(
 
     @DeleteMapping("/{issueId}")
     fun deleteIssue(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable("issueId") issueId: Long,
     ): ResponseEntity<String>{
 

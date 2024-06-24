@@ -1,4 +1,4 @@
-package com.yoong.myissue.common
+package com.yoong.myissue.common.serviceAspect
 
 import com.yoong.myissue.common.annotationGather.CheckAuthentication
 import com.yoong.myissue.common.clazz.ValidAuthentication
