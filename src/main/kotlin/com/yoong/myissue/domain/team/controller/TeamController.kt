@@ -71,4 +71,34 @@ class TeamController(
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(teamService.deleteTeam(teamId, userPrincipal.email))
     }
+
+    @PatchMapping("/invite/{memberId}")
+    fun inviteMember(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
+        @PathVariable memberId: Long,
+    ): ResponseEntity<String>{
+        if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
+
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.inviteTeam(teamId, userPrincipal.email))
+    }
+
+    @PatchMapping("/invite/admin/{memberId}")
+    fun inviteMemberByAdmin(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
+        @PathVariable memberId: Long,
+    ): ResponseEntity<String>{
+        if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
+
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.inviteMemberByAdmin(teamId, userPrincipal.email))
+    }
+
+    @DeleteMapping("/fired/{memberId}")
+    fun firedMember(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
+        @PathVariable memberId: Long,
+    ): ResponseEntity<String>{
+        if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
+
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.firedMember(teamId, userPrincipal.email))
+    }
 }
