@@ -8,6 +8,10 @@ import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.repository.IssueRepository
 import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.exception.clazz.ModelNotFoundException
+import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,6 +26,7 @@ class IssueService(
 ){
 
 
+    private val log = LoggerFactory.getLogger("테스트 입니다")
     fun createIssue(issueCreateRequest: IssueCreateRequest, email: String): String {
 
         val member = memberService.searchEmail(email)
@@ -47,23 +52,25 @@ class IssueService(
 
         val issue = issueRepository.findByIdOrNull(issueId) ?: throw ModelNotFoundException("이슈", issueId.toString())
 
-        return issue.toIssueResponse()
+        log.info(issue.toString())
+        return issue.toIssueResponse(true)
     }
 
     @Transactional(readOnly = true)
     fun getIssueList(
         searchIssueListRequest: SearchIssueListRequest,
-        email: String
-    ): List<IssueResponse> {
+        email: String,
+        pageable: Pageable
+    ): Page<IssueResponse> {
 
-        val issueList = issueRepository.findAll(
+        return issueRepository.findAll(
             searchIssueListRequest.topic,
             searchIssueListRequest.content,
             searchIssueListRequest.asc,
-            searchIssueListRequest.orderBy
-        )
+            searchIssueListRequest.orderBy,
+            pageable
+        ).map { it.toIssueResponse(false) }
 
-        return issueList.map { it.toIssueResponse() }
     }
 
     fun updateIssue(issueId: Long, issueUpdateRequest: IssueUpdateRequest): String {

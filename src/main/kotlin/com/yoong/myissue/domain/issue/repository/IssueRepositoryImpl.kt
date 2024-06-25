@@ -6,25 +6,40 @@ import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.EntityPathBase
 import com.querydsl.core.types.dsl.PathBuilder
+import com.yoong.myissue.domain.comment.entity.QComment
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.entity.QIssue
+import com.yoong.myissue.domain.issue.enumGather.Priority
+import com.yoong.myissue.domain.issue.enumGather.WorkingStatus
+import com.yoong.myissue.exception.clazz.IllegalArgumentException
 import com.yoong.myissue.infra.querydsl.QueryDslSupport
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 
 @Repository
 class IssueRepositoryImpl:QueryDslSupport(), CustomIssueRepository {
 
     private val issue = QIssue.issue
+    private val comment = QComment.comment
 
-    override fun findAll(topic: String, content: String, asc: Boolean, orderBy: String): List<Issue> {
+    override fun findAll(topic: String, content: String, asc: Boolean, orderBy: String, pageable: Pageable): Page<Issue> {
 
-        return queryFactory
+        val query = queryFactory
             .selectFrom(issue)
             .where(
-                topicToContent(topic, content)
-            )
-            .orderBy(getOrderBy(asc, issue, orderBy))
+                topicToContent(topic, content),
+                issue.deletedAt.isNull(),
+            ).orderBy(getOrderBy(asc, issue, orderBy))
+            .offset(pageable.offset)
+            .limit(pageable.pageSize.toLong())
             .fetch()
+
+        val totalSize = query.size
+
+
+        return PageImpl(query, pageable, totalSize.toLong())
     }
 
     fun topicToContent(topic: String, content: String): BooleanExpression {
@@ -33,6 +48,8 @@ class IssueRepositoryImpl:QueryDslSupport(), CustomIssueRepository {
             "title" -> issue.title.like("%$content%")
             "description" -> issue.description.like("%$content%")
             "nickname" -> issue.member.nickname.like("%$content%")
+            "priority" -> issue.priority.eq(Priority.valueOf(content))
+            "workingStatus" -> issue.workingStatus.eq(WorkingStatus.valueOf(content))
             else -> throw IllegalArgumentException("조건을 잘못 입력 하셨습니다")
         }
 

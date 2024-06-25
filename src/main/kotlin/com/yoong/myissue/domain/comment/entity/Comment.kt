@@ -13,6 +13,7 @@ import org.hibernate.annotations.SQLRestriction
 import org.hibernate.dialect.PostgreSQLEnumJdbcType
 import java.time.LocalDateTime
 
+//@TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumJdbcType::class)
 @SQLDelete(sql = "UPDATE comment SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at is null")
 @Entity
@@ -23,8 +24,9 @@ class Comment(
     private var content: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, unique = false)
-    @JdbcType(PostgreSQLEnumJdbcType::class)
+    @Column(name= "checking_status", nullable = false, unique = false)
+//    @JdbcType(PostgreSQLEnumJdbcType::class)
+//    @Type(type = "pgsql_enum")
     private var checkingStatus: CheckingStatus,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,9 +34,11 @@ class Comment(
     private val member: Member,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "issue_id")
-    private val issue: Issue,
+    @JoinColumn(name = "issue_id", nullable = false)
+    val issue: Issue,
+
 ) {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private val id : Long? = null

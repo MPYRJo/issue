@@ -5,5 +5,6 @@ enum class CheckingStatus {
     WAITING,
     APPROVE,
     PENDING,
-    REJECT
+    REJECT,
+    DONE
 }

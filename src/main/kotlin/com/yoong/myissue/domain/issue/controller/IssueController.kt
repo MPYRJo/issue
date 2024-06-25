@@ -10,6 +10,8 @@ import com.yoong.myissue.exception.clazz.InvalidCredentialException
 import com.yoong.myissue.exception.clazz.NoAuthenticationException
 import com.yoong.myissue.infra.security.config.UserPrincipal
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -50,18 +52,23 @@ class IssueController(
     fun getIssueList(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @ModelAttribute searchIssueListRequest: SearchIssueListRequest,
-    ): ResponseEntity<List<IssueResponse>>{
+    ): ResponseEntity<Page<IssueResponse>>{
         if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
 
-        return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssueList(searchIssueListRequest, userPrincipal.email))
+        val pageable = PageRequest.of(searchIssueListRequest.page, searchIssueListRequest.pageSize)
+
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssueList(searchIssueListRequest, userPrincipal.email, pageable))
     }
 
     @PutMapping("/{issueId}")
     fun updateIssue(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable("issueId") issueId: Long,
-        @RequestBody issueUpdateRequest : IssueUpdateRequest
+        @Valid @RequestBody issueUpdateRequest : IssueUpdateRequest,
+        bindingResult: BindingResult
     ): ResponseEntity<String>{
+        if(bindingResult.hasErrors()) throw IllegalArgumentException(bindingResult.fieldError!!.defaultMessage.toString())
+
 
         return ResponseEntity.status(HttpStatus.OK).body(issueService.updateIssue(issueId, issueUpdateRequest))
     }

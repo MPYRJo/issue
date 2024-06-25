@@ -25,7 +25,7 @@ class Member (
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    @JdbcType(PostgreSQLEnumJdbcType::class)
+//    @JdbcType(PostgreSQLEnumJdbcType::class)
     private var role : Role,
 
     @ManyToOne(fetch = FetchType.LAZY)

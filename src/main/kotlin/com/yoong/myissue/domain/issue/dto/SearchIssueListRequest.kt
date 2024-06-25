@@ -5,4 +5,6 @@ data class SearchIssueListRequest(
     val content: String = "",
     val asc: Boolean = true,
     val orderBy: String = "createdAt",
+    val page: Int,
+    val pageSize: Int,
 )

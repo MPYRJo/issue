@@ -26,8 +26,11 @@ class CommentService(
 
     @CheckAuthentication(AuthenticationType.ALL)
     fun createComment(createCommentRequest: CreateCommentRequest, email: String): String {
+
         val member = memberService.searchEmail(email)
+
         val issue = issueService.getIssue(createCommentRequest.issueId)
+
         commentRepository.save(
             Comment(
                 content = createCommentRequest.content,
@@ -36,25 +39,37 @@ class CommentService(
                 issue = issue
             )
         )
+
         return "댓글이 등록 되었습니다 이슈 번호 : ${createCommentRequest.issueId}, 코맨트 내용 : ${createCommentRequest.content}"
     }
 
     @CheckAuthentication(AuthenticationType.ALL)
     fun updateComment(commentId: Long, updateCommentRequest: UpdateCommentRequest, email: String): String {
+
         val member = memberService.searchEmail(email)
+
         val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("댓글", commentId.toString())
+
         if(!validAuthentication.isSame(member, comment)) throw BadRequestException("다른 사람의 댓글은 수정할 수 없습니다")
+
         comment.update(updateCommentRequest)
+
         commentRepository.save(comment)
+
         return "댓글 수정 완료 했습니다"
     }
 
     @CheckAuthentication(AuthenticationType.ALL)
     fun deleteComment(commentId: Long, email: String): String {
+
         val member = memberService.searchEmail(email)
+
         val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("댓글", commentId.toString())
+
         if(!validAuthentication.isSame(member, comment)) throw BadRequestException("다른 사람의 댓글은 삭제할 수 없습니다")
+
         commentRepository.delete(comment)
+
         return "삭제가 완료 되었습니다 댓글 아이디 : $commentId"
     }
 

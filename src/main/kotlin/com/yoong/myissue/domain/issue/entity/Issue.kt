@@ -8,10 +8,12 @@ import com.yoong.myissue.domain.issue.enumGather.WorkingStatus
 import com.yoong.myissue.domain.member.entity.Member
 import com.yoong.myissue.domain.team.entity.Team
 import jakarta.persistence.*
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Table
 import org.hibernate.annotations.*
 import org.hibernate.dialect.PostgreSQLEnumJdbcType
 import java.time.LocalDateTime
+
 
 @SQLDelete(sql = "UPDATE issue SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at is null")
@@ -27,12 +29,12 @@ class Issue(
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = false)
-    @JdbcType(PostgreSQLEnumJdbcType::class)
+//    @JdbcType(PostgreSQLEnumJdbcType::class)
     private var priority : Priority,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = false)
-    @JdbcType(PostgreSQLEnumJdbcType::class)
+//    @JdbcType(PostgreSQLEnumJdbcType::class)
     private var workingStatus : WorkingStatus,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,7 +45,7 @@ class Issue(
     @JoinColumn(name = "team_id")
     private val team: Team,
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "issue_id")
     private val comment: List<Comment>
 
@@ -64,13 +66,13 @@ class Issue(
     private var deletedAt: LocalDateTime? = null
 
     fun update(issueUpdateRequest: IssueUpdateRequest){
-        this.title = issueUpdateRequest.title ?: this.title
-        this.description = issueUpdateRequest.description ?: this.description
-        this.priority = issueUpdateRequest.priority ?: this.priority
-        this.workingStatus = issueUpdateRequest.workingStatus ?: this.workingStatus
+        this.title = if(issueUpdateRequest.title == "") this.title else issueUpdateRequest.title?: this.title
+        this.description = if(issueUpdateRequest.description == "") this.title else issueUpdateRequest.description ?: this.description
+        this.priority = issueUpdateRequest.priority
+        this.workingStatus = issueUpdateRequest.workingStatus
     }
 
-    fun toIssueResponse(): IssueResponse {
+    fun toIssueResponse(isComment: Boolean): IssueResponse {
         return IssueResponse(
             id = id!!,
             title = title,
@@ -80,7 +82,7 @@ class Issue(
             nickname = member.getNickname(),
             teamName = team.getTeamName(),
             createdAt = createdAt,
-            comment = comment.map { it.toCommentResponse() }
+            comment = if(isComment) comment.map { it.toCommentResponse() } else emptyList(),
         )
     }
 

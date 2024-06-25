@@ -34,7 +34,7 @@ class Team(
         return TeamResponse(
             id = id!!,
             name = name,
-            issue = issues.map { it.toIssueResponse() },
+            issue = issues.map { it.toIssueResponse(false) },
             member = members.map { it.toMemberResponse() }
         )
     }
