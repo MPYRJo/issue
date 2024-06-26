@@ -4,7 +4,7 @@ import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
 import com.yoong.myissue.domain.issue.dto.SearchIssueListRequest
-import com.yoong.myissue.domain.issue.service.IssueService
+import com.yoong.myissue.domain.issue.service.IssueServiceImpl
 import com.yoong.myissue.exception.clazz.IllegalArgumentException
 import com.yoong.myissue.exception.clazz.InvalidCredentialException
 import com.yoong.myissue.exception.clazz.NoAuthenticationException
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/issues")
 class IssueController(
-    private val issueService: IssueService
+    private val issueService: IssueServiceImpl
 ) {
 
     @PostMapping
