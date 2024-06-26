@@ -1,16 +1,15 @@
-package com.yoong.myissue.domain.issue.repository
-
 import com.querydsl.core.types.Expression
 import com.querydsl.core.types.Order
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.EntityPathBase
 import com.querydsl.core.types.dsl.PathBuilder
-import com.yoong.myissue.domain.comment.entity.QComment
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.entity.QIssue
 import com.yoong.myissue.domain.issue.enumGather.Priority
 import com.yoong.myissue.domain.issue.enumGather.WorkingStatus
+import com.yoong.myissue.domain.issue.repository.IssueJpaRepository
+import com.yoong.myissue.domain.issue.repository.IssueRepository
 import com.yoong.myissue.exception.clazz.IllegalArgumentException
 import com.yoong.myissue.infra.querydsl.QueryDslSupport
 import org.springframework.data.domain.Page
@@ -19,10 +18,11 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 
 @Repository
-class IssueRepositoryImpl:QueryDslSupport(), CustomIssueRepository {
+class IssueRepositoryImpl(
+    val issueJpaRepository: IssueJpaRepository,
+):QueryDslSupport(), IssueRepository {
 
     private val issue = QIssue.issue
-    private val comment = QComment.comment
 
     override fun findAll(topic: String, content: String, asc: Boolean, orderBy: String, pageable: Pageable): Page<Issue> {
 
@@ -40,6 +40,18 @@ class IssueRepositoryImpl:QueryDslSupport(), CustomIssueRepository {
 
 
         return PageImpl(query, pageable, totalSize.toLong())
+    }
+
+    override fun save(issue: Issue): Issue {
+        return issueJpaRepository.save(issue)
+    }
+
+    override fun findByIdOrNull(id: Long): Issue? {
+        return issueJpaRepository.findByIdOrNull(id)
+    }
+
+    override fun delete(issue: Issue) {
+        issueJpaRepository.delete(issue)
     }
 
     fun topicToContent(topic: String, content: String): BooleanExpression {
@@ -64,4 +76,6 @@ class IssueRepositoryImpl:QueryDslSupport(), CustomIssueRepository {
             pathBuilder.get(str) as Expression<Comparable<*>>,
         )
     }
+
+
 }

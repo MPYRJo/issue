@@ -8,23 +8,20 @@ import com.yoong.myissue.domain.issue.enumGather.Role
 import com.yoong.myissue.domain.issue.enumGather.WorkingStatus
 import com.yoong.myissue.domain.member.entity.Member
 import com.yoong.myissue.domain.team.entity.Team
-import com.yoong.myissue.infra.querydsl.QueryDslSupport
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 
-//@DataJpaTest
-@SpringBootTest
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//@ActiveProfiles("test")
+@DataJpaTest
+//@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 //@Import(value = [QueryDslSupport::class])
-class IssueRepositoryImplTest @Autowired constructor(
-    val issueRepository: IssueRepository,
+class IssueJpaRepositoryImplTest @Autowired constructor(
+    val issueRepository: IssueJpaRepository,
 ) {
 
 

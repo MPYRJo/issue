@@ -9,14 +9,10 @@ import com.yoong.myissue.domain.issue.repository.IssueRepository
 import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.exception.clazz.ModelNotFoundException
 import org.slf4j.LoggerFactory
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.bind.annotation.ModelAttribute
-import java.time.LocalDateTime
 
 @Transactional
 @Service
