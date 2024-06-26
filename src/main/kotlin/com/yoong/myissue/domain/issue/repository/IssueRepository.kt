@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface IssueRepository{
 
-    fun findAll(topic: String, content: String, asc: Boolean, orderBy: String, pageable: Pageable): Page<Issue>
+    fun findAllIssueList(topic: String, content: String, asc: Boolean, orderBy: String, pageable: Pageable): Page<Issue>
 
     fun save(issue: Issue): Issue
 

@@ -1,30 +1,38 @@
+package com.yoong.myissue.domain.issue.repository
+
 import com.querydsl.core.types.Expression
 import com.querydsl.core.types.Order
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.EntityPathBase
 import com.querydsl.core.types.dsl.PathBuilder
+import com.querydsl.jpa.impl.JPAQueryFactory
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.entity.QIssue
 import com.yoong.myissue.domain.issue.enumGather.Priority
 import com.yoong.myissue.domain.issue.enumGather.WorkingStatus
-import com.yoong.myissue.domain.issue.repository.IssueJpaRepository
-import com.yoong.myissue.domain.issue.repository.IssueRepository
 import com.yoong.myissue.exception.clazz.IllegalArgumentException
-import com.yoong.myissue.infra.querydsl.QueryDslSupport
+import jakarta.persistence.EntityManager
+import jakarta.persistence.PersistenceContext
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
 class IssueRepositoryImpl(
     val issueJpaRepository: IssueJpaRepository,
-):QueryDslSupport(), IssueRepository {
+    @PersistenceContext
+    private val em: EntityManager,
+): IssueRepository {
 
     private val issue = QIssue.issue
 
-    override fun findAll(topic: String, content: String, asc: Boolean, orderBy: String, pageable: Pageable): Page<Issue> {
+    private val queryFactory: JPAQueryFactory = JPAQueryFactory(em)
+
+
+    override fun findAllIssueList(topic: String, content: String, asc: Boolean, orderBy: String, pageable: Pageable): Page<Issue> {
 
         val query = queryFactory
             .selectFrom(issue)

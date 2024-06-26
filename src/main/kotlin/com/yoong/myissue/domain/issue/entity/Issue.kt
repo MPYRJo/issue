@@ -29,12 +29,12 @@ class Issue(
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = false)
-//    @JdbcType(PostgreSQLEnumJdbcType::class)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
     private var priority : Priority,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = false)
-//    @JdbcType(PostgreSQLEnumJdbcType::class)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
     private var workingStatus : WorkingStatus,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -88,5 +88,6 @@ class Issue(
 
     fun getCreatedAt() = this.createdAt
     fun getMember() = this.member.getId()
+
 
 }

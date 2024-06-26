@@ -59,7 +59,7 @@ class IssueService(
         pageable: Pageable
     ): Page<IssueResponse> {
 
-        return issueRepository.findAll(
+        return issueRepository.findAllIssueList(
             searchIssueListRequest.topic,
             searchIssueListRequest.content,
             searchIssueListRequest.asc,
