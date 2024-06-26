@@ -8,7 +8,7 @@ import com.yoong.myissue.domain.member.repository.MemberJpaRepository
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.domain.team.repository.TeamJpaRepository
 import com.yoong.myissue.domain.team.service.ExternalTeamService
-import com.yoong.myissue.domain.team.service.TeamService
+import com.yoong.myissue.domain.team.service.TeamServiceImpl
 import com.yoong.myissue.infra.security.jwt.JwtPlugin
 import com.yoong.myissue.infra.security.jwt.PasswordEncoder
 import io.kotest.matchers.shouldBe
@@ -28,7 +28,7 @@ class MemberServiceTest {
     private val passwordManagement = PasswordManagement(passwordEncoder)
     private val jwtPlugin = mockk<JwtPlugin>()
     private val memberService = MemberService(memberRepository, externalTeamService, passwordManagement, jwtPlugin)
-    private val teamService = TeamService(teamRepository, externalMemberService, externalTeamService)
+    private val teamService = TeamServiceImpl(teamRepository, externalMemberService, externalTeamService)
 
     @Test
     fun `정상적으로 SingUp 이 되었을 경우 "회원 가입이 완료 되었습니다!!" 를 반환`(){

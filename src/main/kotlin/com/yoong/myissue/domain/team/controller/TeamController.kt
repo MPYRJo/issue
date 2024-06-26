@@ -4,7 +4,7 @@ import com.yoong.myissue.common.annotationGather.FailedLogin
 import com.yoong.myissue.domain.team.dto.TeamAdminInviteRequest
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
-import com.yoong.myissue.domain.team.service.TeamService
+import com.yoong.myissue.domain.team.service.TeamServiceImpl
 import com.yoong.myissue.infra.security.config.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/team")
 class TeamController(
-    private val teamService: TeamService
+    private val teamService: TeamServiceImpl
 ) {
 
     @PostMapping
