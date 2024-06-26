@@ -3,7 +3,7 @@ package com.yoong.myissue.domain.member.controller
 import com.yoong.myissue.domain.member.dto.LoginRequest
 import com.yoong.myissue.domain.member.dto.LoginResponse
 import com.yoong.myissue.domain.member.dto.SignupRequest
-import com.yoong.myissue.domain.member.service.MemberService
+import com.yoong.myissue.domain.member.service.MemberServiceImpl
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/member")
 class MemberController(
-    private val memberService: MemberService
+    private val memberService: MemberServiceImpl
 ) {
 
     @PostMapping("/signup")

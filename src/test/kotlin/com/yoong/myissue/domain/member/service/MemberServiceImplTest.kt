@@ -17,7 +17,7 @@ import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.springframework.data.repository.findByIdOrNull
 
-class MemberServiceTest {
+class MemberServiceImplTest {
 
 
     private val memberRepository = mockk<MemberJpaRepository>()
@@ -27,7 +27,7 @@ class MemberServiceTest {
     private val passwordEncoder = PasswordEncoder()
     private val passwordManagement = PasswordManagement(passwordEncoder)
     private val jwtPlugin = mockk<JwtPlugin>()
-    private val memberService = MemberService(memberRepository, externalTeamService, passwordManagement, jwtPlugin)
+    private val memberService = MemberServiceImpl(memberRepository, externalTeamService, passwordManagement, jwtPlugin)
     private val teamService = TeamServiceImpl(teamRepository, externalMemberService, externalTeamService)
 
     @Test
