@@ -11,7 +11,6 @@ import com.yoong.myissue.domain.issue.service.ExternalIssueService
 import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.exception.clazz.BadRequestException
 import com.yoong.myissue.exception.clazz.ModelNotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
