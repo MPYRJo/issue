@@ -1,6 +1,7 @@
 package com.yoong.myissue.domain.team.service
 
 import com.yoong.myissue.domain.team.entity.Team
+import com.yoong.myissue.domain.team.repository.TeamJpaRepository
 import com.yoong.myissue.domain.team.repository.TeamRepository
 import com.yoong.myissue.exception.clazz.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull

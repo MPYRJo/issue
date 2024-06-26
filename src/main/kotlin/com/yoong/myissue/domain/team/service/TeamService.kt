@@ -7,6 +7,7 @@ import com.yoong.myissue.domain.member.service.ExternalMemberService
 import com.yoong.myissue.domain.team.dto.TeamRequest
 import com.yoong.myissue.domain.team.dto.TeamResponse
 import com.yoong.myissue.domain.team.entity.Team
+import com.yoong.myissue.domain.team.repository.TeamJpaRepository
 import com.yoong.myissue.domain.team.repository.TeamRepository
 import com.yoong.myissue.exception.clazz.DummyTeamException
 import com.yoong.myissue.exception.clazz.DuplicatedModelException
