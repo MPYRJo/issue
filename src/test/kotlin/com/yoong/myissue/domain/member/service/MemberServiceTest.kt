@@ -4,7 +4,7 @@ import com.yoong.myissue.domain.issue.enumGather.Role
 import com.yoong.myissue.common.clazz.PasswordManagement
 import com.yoong.myissue.domain.member.dto.SignupRequest
 import com.yoong.myissue.domain.member.entity.Member
-import com.yoong.myissue.domain.member.repository.MemberRepository
+import com.yoong.myissue.domain.member.repository.MemberJpaRepository
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.domain.team.repository.TeamRepository
 import com.yoong.myissue.domain.team.service.ExternalTeamService
@@ -20,7 +20,7 @@ import org.springframework.data.repository.findByIdOrNull
 class MemberServiceTest {
 
 
-    private val memberRepository = mockk<MemberRepository>()
+    private val memberRepository = mockk<MemberJpaRepository>()
     private val externalMemberService = ExternalMemberService(memberRepository)
     private val teamRepository = mockk<TeamRepository>()
     private val externalTeamService = ExternalTeamService(teamRepository)

@@ -6,6 +6,7 @@ import com.yoong.myissue.domain.member.dto.LoginRequest
 import com.yoong.myissue.domain.member.dto.LoginResponse
 import com.yoong.myissue.domain.member.dto.SignupRequest
 import com.yoong.myissue.domain.member.entity.Member
+import com.yoong.myissue.domain.member.repository.MemberJpaRepository
 import com.yoong.myissue.domain.member.repository.MemberRepository
 import com.yoong.myissue.domain.team.service.ExternalTeamService
 import com.yoong.myissue.exception.clazz.DuplicatedModelException
