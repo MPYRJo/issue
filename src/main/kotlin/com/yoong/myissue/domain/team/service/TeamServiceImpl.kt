@@ -106,7 +106,7 @@ class TeamServiceImpl(
 
         val team = externalTeamService.getTeamById(teamId)
 
-        if (teamId == DUMMY_TEAM) throw DummyTeamException()
+        if (teamId == DUMMY_TEAM) throw DummyTeamException(null)
 
         when(member.getTeam()){
             team -> throw IllegalArgumentException("이미 현재 팀에 소속 되어 있습니다")

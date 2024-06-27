@@ -1,6 +1,7 @@
 package com.yoong.myissue.domain.issue.repository
 
 import com.yoong.myissue.domain.issue.entity.Issue
+import com.yoong.myissue.domain.team.entity.Team
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface IssueRepository{
 
-    fun findAllIssueList(topic: String, content: String, asc: Boolean, orderBy: String, pageable: Pageable): Page<Issue>
+    fun findAllIssueList(topic: String, content: String, asc: Boolean, orderBy: String, team: Team, pageable: Pageable): Page<Issue>
 
     fun save(issue: Issue): Issue
 

@@ -7,10 +7,12 @@ import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.EntityPathBase
 import com.querydsl.core.types.dsl.PathBuilder
 import com.querydsl.jpa.impl.JPAQueryFactory
+import com.yoong.myissue.common.annotationGather.CheckMyTeam
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.entity.QIssue
 import com.yoong.myissue.domain.issue.enumGather.Priority
 import com.yoong.myissue.domain.issue.enumGather.WorkingStatus
+import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.exception.clazz.IllegalArgumentException
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
@@ -32,13 +34,14 @@ class IssueRepositoryImpl(
     private val queryFactory: JPAQueryFactory = JPAQueryFactory(em)
 
 
-    override fun findAllIssueList(topic: String, content: String, asc: Boolean, orderBy: String, pageable: Pageable): Page<Issue> {
+    override fun findAllIssueList(topic: String, content: String, asc: Boolean, orderBy: String, team: Team, pageable: Pageable): Page<Issue> {
 
         val query = queryFactory
             .selectFrom(issue)
             .where(
                 topicToContent(topic, content),
                 issue.deletedAt.isNull(),
+                issue.team.eq(team),
             ).orderBy(getOrderBy(asc, issue, orderBy))
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())

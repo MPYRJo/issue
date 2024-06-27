@@ -71,11 +71,18 @@ class IssueServiceImpl(
         pageable: Pageable
     ): Page<IssueResponse> {
 
+        val teamId = memberService.searchEmail(email).getTeam().getId()!!
+
+        if(teamId == DUMMY_TEAM) throw DummyTeamException("임시 팀 맴버는 이슈를 볼 수 없습니다")
+
+        val team = teamService.getTeamById(teamId)
+
         return issueRepository.findAllIssueList(
             searchIssueListRequest.topic,
             searchIssueListRequest.content,
             searchIssueListRequest.asc,
             searchIssueListRequest.orderBy,
+            team,
             pageable
         ).map { it.toIssueResponse(false) }
 
