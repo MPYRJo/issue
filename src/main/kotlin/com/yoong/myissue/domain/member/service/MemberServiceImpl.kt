@@ -49,9 +49,9 @@ class MemberServiceImpl(
     @Transactional
     override fun login(loginRequest: LoginRequest): LoginResponse {
 
-       val member = memberRepository.findByEmail(loginRequest.email)?: throw InvalidCredentialException("이메일")
+       val member = memberRepository.findByEmail(loginRequest.email)?: throw InvalidCredentialException("이메일이 일치하지 않습니다")
 
-       if (member.validPassword(passwordManagement,loginRequest.password)) throw InvalidCredentialException("비밀 번호")
+       if (member.validPassword(passwordManagement,loginRequest.password)) throw InvalidCredentialException("비밀 번호가 일치하지 않습니다")
 
         return LoginResponse(
             email = loginRequest.email,
