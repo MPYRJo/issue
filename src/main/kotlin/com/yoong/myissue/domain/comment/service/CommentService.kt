@@ -22,7 +22,7 @@ class CommentService(
     ){
 
     @CheckAuthentication(AuthenticationType.ALL)
-    fun createComment(createCommentRequest: CreateCommentRequest, email: String): String {
+    fun createComment(email: String, createCommentRequest: CreateCommentRequest): String {
 
         val member = memberService.searchEmail(email)
 
@@ -42,7 +42,7 @@ class CommentService(
 
     @CheckAuthentication(AuthenticationType.ALL)
     @CheckMyComment("수정")
-    fun updateComment(commentId: Long, email: String, updateCommentRequest: UpdateCommentRequest): String {
+    fun updateComment(email: String, commentId: Long, updateCommentRequest: UpdateCommentRequest): String {
 
         val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("댓글", commentId.toString())
 
@@ -55,7 +55,7 @@ class CommentService(
 
     @CheckAuthentication(AuthenticationType.ALL)
     @CheckMyComment("삭제")
-    fun deleteComment(commentId: Long, email: String): String {
+    fun deleteComment(email: String, commentId: Long): String {
 
         val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("댓글", commentId.toString())
 

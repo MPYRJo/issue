@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable
 
 interface IssueService {
 
-    fun createIssue(issueCreateRequest: IssueCreateRequest, email: String): String
+    fun createIssue(email: String, issueCreateRequest: IssueCreateRequest): String
 
     fun getIssue(email: String, issueId: Long): IssueResponse
 
@@ -18,6 +18,8 @@ interface IssueService {
         searchIssueListRequest: SearchIssueListRequest,
         pageable: Pageable
     ): Page<IssueResponse>
+
+    fun getDeletedIssue(email: String, pageable: Pageable): Page<IssueResponse>
 
     fun updateIssue(email: String, issueId: Long, issueUpdateRequest: IssueUpdateRequest): String
 

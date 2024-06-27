@@ -28,7 +28,7 @@ class IssueServiceImpl(
 ): IssueService{
 
     @CheckAuthentication(AuthenticationType.ALL)
-    override fun createIssue(issueCreateRequest: IssueCreateRequest, email: String): String {
+    override fun createIssue(email: String, issueCreateRequest: IssueCreateRequest): String {
 
         val member = memberService.searchEmail(email)
 
@@ -82,6 +82,12 @@ class IssueServiceImpl(
             pageable
         ).map { it.toIssueResponse(false) }
 
+    }
+
+    @CheckAuthentication(AuthenticationType.ADMIN)
+    override fun getDeletedIssue(email: String, pageable: Pageable): Page<IssueResponse> {
+
+        return issueRepository.findAllDeleted(pageable).map { it.toIssueResponse(false) }
     }
 
     @CheckAuthentication(AuthenticationType.ALL)

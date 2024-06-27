@@ -13,6 +13,8 @@ import com.yoong.myissue.infra.security.config.UserPrincipal
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -36,7 +38,7 @@ class IssueController(
 
         if(bindingResult.hasErrors()) throw IllegalArgumentException(bindingResult.fieldError!!.defaultMessage.toString())
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueCreateRequest, userPrincipal!!.email))
+        return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(userPrincipal!!.email, issueCreateRequest))
     }
 
     @GetMapping("/{issueId}")
@@ -59,6 +61,21 @@ class IssueController(
         val pageable = PageRequest.of(searchIssueListRequest.page, searchIssueListRequest.pageSize)
 
         return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssueList(userPrincipal!!.email, searchIssueListRequest, pageable))
+    }
+
+    @FailedLogin
+    @GetMapping("/deleted")
+    fun getDeletedIssueList(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal?,
+        @RequestParam(value = "page_number", defaultValue = "0") page: Int,
+        @RequestParam(value = "page_size", defaultValue = "10") pageSize: Int,
+        @RequestParam(value = "sort_by", defaultValue = "id") sortBy: String,
+        @RequestParam(value = "ascend", defaultValue = "true") isAsc: Boolean,
+        ): ResponseEntity<Page<IssueResponse>>{
+        val orderBy = if(isAsc) Sort.by(sortBy).ascending() else Sort.by(sortBy).descending()
+        val pageable = PageRequest.of(page, pageSize, orderBy)
+
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.getDeletedIssue(userPrincipal!!.email, pageable))
     }
 
     @PutMapping("/{issueId}")

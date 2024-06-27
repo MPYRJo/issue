@@ -16,7 +16,6 @@ import java.time.LocalDateTime
 
 
 @SQLDelete(sql = "UPDATE issue SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("deleted_at is null")
 @Entity
 @Table(name = "issue")
 class Issue(

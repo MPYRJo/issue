@@ -18,4 +18,6 @@ interface IssueRepository{
     fun delete(issue: Issue)
 
     fun deletedIssue()
+
+    fun findAllDeleted(pageable: Pageable): Page<Issue>
 }

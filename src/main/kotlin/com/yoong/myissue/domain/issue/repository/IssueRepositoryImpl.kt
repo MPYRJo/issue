@@ -57,7 +57,7 @@ class IssueRepositoryImpl(
     }
 
     override fun findByIdOrNull(id: Long): Issue? {
-        return issueJpaRepository.findByIdOrNull(id)
+        return issueJpaRepository.findByIdAndDeletedAtIsNull(id)
     }
 
     override fun delete(issue: Issue) {
@@ -68,7 +68,18 @@ class IssueRepositoryImpl(
         issueJpaRepository.deletedIssue()
     }
 
-    fun topicToContent(topic: String, content: String): BooleanExpression {
+    override fun findAllDeleted(pageable: Pageable): Page<Issue> {
+        val query = queryFactory
+            .selectFrom(issue)
+            .where(issue.deletedAt.isNotNull)
+            .fetch()
+
+        val totalSize = query.size.toLong()
+
+        return PageImpl(query, pageable, totalSize)
+    }
+
+    private fun topicToContent(topic: String, content: String): BooleanExpression {
 
         return when(topic){
             "title" -> issue.title.like("%$content%")

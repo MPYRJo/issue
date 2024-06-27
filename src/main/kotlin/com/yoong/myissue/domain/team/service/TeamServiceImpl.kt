@@ -24,8 +24,7 @@ class TeamServiceImpl(
 ): TeamService {
 
     @CheckAuthentication(authenticationType = AuthenticationType.USER)
-    override fun createTeam(createTeamRequest: TeamRequest, email: String): String {
-
+    override fun createTeam(email: String, createTeamRequest: TeamRequest): String {
         val member = memberService.searchEmail(email)
 
         if(teamRepository.existsByName(createTeamRequest.name)) throw DuplicatedModelException("팀 명", createTeamRequest.name)
@@ -42,8 +41,7 @@ class TeamServiceImpl(
     @CheckAuthentication(authenticationType = AuthenticationType.LEADER_AND_ADMIN)
     @CheckDummyTeam
     @Transactional(readOnly = true)
-    override fun getTeamById(teamId: Long, email: String): TeamResponse {
-
+    override fun getTeamById(email: String, teamId: Long): TeamResponse {
         return teamRepository.findByIdOrNull(teamId)?.toTeamResponse() ?: throw ModelNotFoundException("id", teamId.toString())
     }
 
@@ -57,8 +55,7 @@ class TeamServiceImpl(
     @CheckAuthentication(authenticationType = AuthenticationType.LEADER_AND_ADMIN)
     @LeaderChoosesOtherTeam
     @CheckDummyTeam
-    override fun updateTeam(teamId: Long, email: String, teamRequest: TeamRequest): String {
-
+    override fun updateTeam(email: String, teamId: Long, teamRequest: TeamRequest): String {
         val team = teamRepository.findByIdOrNull(teamId) ?: throw ModelNotFoundException("id", teamId.toString())
 
         team.update(teamRequest)
@@ -71,7 +68,7 @@ class TeamServiceImpl(
     @CheckAuthentication(authenticationType = AuthenticationType.LEADER_AND_ADMIN)
     @LeaderChoosesOtherTeam
     @CheckDummyTeam
-    override fun deleteTeam(teamId: Long, email: String): String {
+    override fun deleteTeam(email: String, teamId: Long): String {
 
         val team = teamRepository.findByIdOrNull(teamId) ?: throw ModelNotFoundException("id", teamId.toString())
 
@@ -83,7 +80,7 @@ class TeamServiceImpl(
     @CheckAuthentication(authenticationType = AuthenticationType.LEADER)
     @CheckUser
     @CheckMine
-    override fun inviteTeam(memberId: Long, email: String): String {
+    override fun inviteTeam(email: String, memberId: Long): String {
 
         val member = memberService.searchId(memberId)
         val leader = memberService.searchEmail(email)
@@ -100,7 +97,7 @@ class TeamServiceImpl(
     @CheckAuthentication(authenticationType = AuthenticationType.ADMIN)
     @CheckUser
     @CheckMine
-    override fun inviteMemberByAdmin(memberId: Long, email: String, teamId: Long): String {
+    override fun inviteMemberByAdmin(email: String, memberId: Long, teamId: Long): String {
 
         val member = memberService.searchId(memberId)
 
@@ -119,7 +116,7 @@ class TeamServiceImpl(
     @CheckAuthentication(authenticationType = AuthenticationType.LEADER_AND_ADMIN)
     @CheckUser
     @CheckMine
-    override fun firedMember(memberId: Long, email: String): String? {
+    override fun firedMember(email: String, memberId: Long): String? {
 
         val dummyTeam = externalTeamService.getDummyTeam()
         val member = memberService.searchId(memberId)
@@ -136,7 +133,6 @@ class TeamServiceImpl(
 
         return "팀 원 그룹 탈퇴 처리 완료 했습니다"
     }
-
 
 }
 

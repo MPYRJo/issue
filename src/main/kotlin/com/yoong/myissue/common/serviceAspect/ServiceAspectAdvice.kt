@@ -13,6 +13,7 @@ import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.reflect.MethodSignature
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Aspect
@@ -23,6 +24,8 @@ class ServiceAspectAdvice(
     private val teamService: ExternalTeamService
 ) {
 
+    val log = LoggerFactory.getLogger("test")
+
     @Before("@annotation(com.yoong.myissue.common.annotationGather.CheckAuthentication)")
     fun checkAuthentication(joinPoint: JoinPoint) {
         val methodSignature = joinPoint.signature as MethodSignature
@@ -31,7 +34,7 @@ class ServiceAspectAdvice(
 
         val authenticationType = annotation.authenticationType
 
-        val member = memberService.searchEmail(joinPoint.args[1].toString())
+        val member = memberService.searchEmail(joinPoint.args[0].toString())
 
         validAuthentication.role(member.getRole(), authenticationType)
     }
@@ -39,7 +42,7 @@ class ServiceAspectAdvice(
     @Before("@annotation(com.yoong.myissue.common.annotationGather.CheckDummyTeam)")
     fun checkDummyTeam(joinPoint: JoinPoint) {
 
-        val teamId = joinPoint.args[0] as Long
+        val teamId = joinPoint.args[1] as Long
 
         if (teamId == DUMMY_TEAM) throw DummyTeamException(null)
     }
@@ -47,8 +50,8 @@ class ServiceAspectAdvice(
     @Before("@annotation(com.yoong.myissue.common.annotationGather.LeaderChoosesOtherTeam)")
     fun leaderChoosesOtherTeam(joinPoint: JoinPoint) {
 
-        val teamId = joinPoint.args[0] as Long
-        val memberEmail = joinPoint.args[1] as String
+        val memberEmail = joinPoint.args[0] as String
+        val teamId = joinPoint.args[1] as Long
 
         val team = teamService.getTeamById(teamId)
         val member = memberService.searchEmail(memberEmail)
@@ -59,7 +62,8 @@ class ServiceAspectAdvice(
 
     @Before("@annotation(com.yoong.myissue.common.annotationGather.CheckUser)")
     fun checkUser(joinPoint: JoinPoint){
-        val memberId = joinPoint.args[0] as Long
+
+        val memberId = joinPoint.args[1] as Long
         val member = memberService.searchId(memberId)
 
         if(member.getRole() != Role.USER) throw IllegalArgumentException("리더 및 관리자는 팀원으로 추가 및 방출할 수 없습니다")
@@ -67,8 +71,8 @@ class ServiceAspectAdvice(
 
     @Before("@annotation(com.yoong.myissue.common.annotationGather.CheckMine)")
     fun checkMine(joinPoint: JoinPoint){
-        val memberId = joinPoint.args[0] as Long
-        val leaderEmail = joinPoint.args[1] as String
+        val memberId = joinPoint.args[1] as Long
+        val leaderEmail = joinPoint.args[0] as String
         val member = memberService.searchId(memberId)
         val leader = memberService.searchEmail(leaderEmail)
 

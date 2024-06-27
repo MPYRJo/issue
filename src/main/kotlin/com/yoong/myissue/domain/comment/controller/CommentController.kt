@@ -25,7 +25,7 @@ class CommentController(
         @RequestBody createCommentRequest: CreateCommentRequest
     ): ResponseEntity<String> {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(createCommentRequest, userPrincipal!!.email))
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(userPrincipal!!.email, createCommentRequest ))
     }
 
     @FailedLogin
@@ -36,7 +36,7 @@ class CommentController(
         @RequestBody updateCommentRequest: UpdateCommentRequest
     ): ResponseEntity<String>{
 
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.updateComment(commentId,userPrincipal!!.email, updateCommentRequest))
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.updateComment(userPrincipal!!.email, commentId, updateCommentRequest))
     }
 
     @FailedLogin
@@ -46,6 +46,6 @@ class CommentController(
         @PathVariable commentId: Long,
     ): ResponseEntity<String>{
 
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.deleteComment(commentId, userPrincipal!!.email))
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.deleteComment(userPrincipal!!.email, commentId))
     }
 }

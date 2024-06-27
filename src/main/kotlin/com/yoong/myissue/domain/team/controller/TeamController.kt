@@ -24,7 +24,7 @@ class TeamController(
         @RequestBody createTeamRequest: TeamRequest
     ): ResponseEntity<String> {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(teamService.createTeam(createTeamRequest, userPrincipal!!.email))
+        return ResponseEntity.status(HttpStatus.CREATED).body(teamService.createTeam(userPrincipal!!.email, createTeamRequest))
     }
 
     @GetMapping("/{teamId}")
@@ -34,7 +34,7 @@ class TeamController(
         @PathVariable teamId: Long,
     ): ResponseEntity<TeamResponse> {
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamById(teamId, userPrincipal!!.email))
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamById(userPrincipal!!.email, teamId))
     }
 
     @GetMapping
@@ -54,7 +54,7 @@ class TeamController(
         @RequestBody updateTeamRequest: TeamRequest
     ):ResponseEntity<String>{
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.updateTeam(teamId, userPrincipal!!.email, updateTeamRequest))
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.updateTeam(userPrincipal!!.email, teamId, updateTeamRequest))
     }
 
 
@@ -65,7 +65,7 @@ class TeamController(
         @PathVariable teamId: Long,
     ): ResponseEntity<String>{
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(teamService.deleteTeam(teamId, userPrincipal!!.email))
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(teamService.deleteTeam(userPrincipal!!.email, teamId ))
     }
 
     @PatchMapping("/invite/{memberId}")
@@ -75,7 +75,7 @@ class TeamController(
         @PathVariable memberId: Long,
     ): ResponseEntity<String>{
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.inviteTeam(memberId, userPrincipal!!.email))
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.inviteTeam(userPrincipal!!.email, memberId ))
     }
 
     @PatchMapping("/invite/admin")
@@ -87,7 +87,7 @@ class TeamController(
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(
-                teamService.inviteMemberByAdmin(teamAdminInviteRequest.memberId, userPrincipal!!.email,teamAdminInviteRequest.teamId
+                teamService.inviteMemberByAdmin(userPrincipal!!.email, teamAdminInviteRequest.memberId, teamAdminInviteRequest.teamId
                 ))
     }
 
@@ -98,6 +98,6 @@ class TeamController(
         @PathVariable memberId: Long,
     ): ResponseEntity<String>{
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.firedMember(memberId, userPrincipal!!.email))
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.firedMember(userPrincipal!!.email, memberId))
     }
 }
