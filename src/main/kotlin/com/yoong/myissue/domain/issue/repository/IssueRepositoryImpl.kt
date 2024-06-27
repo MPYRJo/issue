@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.EntityPathBase
 import com.querydsl.core.types.dsl.PathBuilder
 import com.querydsl.jpa.impl.JPAQueryFactory
-import com.yoong.myissue.common.annotationGather.CheckMyTeam
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.entity.QIssue
 import com.yoong.myissue.domain.issue.enumGather.Priority
