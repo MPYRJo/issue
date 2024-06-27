@@ -1,7 +1,7 @@
 package com.yoong.myissue.domain.comment.service
 
 import com.yoong.myissue.common.annotationGather.CheckAuthentication
-import com.yoong.myissue.common.clazz.ValidAuthentication
+import com.yoong.myissue.common.annotationGather.CheckMyComment
 import com.yoong.myissue.common.enumGather.AuthenticationType
 import com.yoong.myissue.domain.comment.dto.CreateCommentRequest
 import com.yoong.myissue.domain.comment.dto.UpdateCommentRequest
@@ -9,7 +9,6 @@ import com.yoong.myissue.domain.comment.entity.Comment
 import com.yoong.myissue.domain.comment.repository.CommentRepository
 import com.yoong.myissue.domain.issue.service.ExternalIssueService
 import com.yoong.myissue.domain.member.service.ExternalMemberService
-import com.yoong.myissue.exception.clazz.BadRequestException
 import com.yoong.myissue.exception.clazz.ModelNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,8 +19,7 @@ class CommentService(
     private val commentRepository: CommentRepository,
     private val issueService: ExternalIssueService,
     private val memberService: ExternalMemberService,
-    private val validAuthentication: ValidAuthentication
-){
+    ){
 
     @CheckAuthentication(AuthenticationType.ALL)
     fun createComment(createCommentRequest: CreateCommentRequest, email: String): String {
@@ -43,13 +41,10 @@ class CommentService(
     }
 
     @CheckAuthentication(AuthenticationType.ALL)
-    fun updateComment(commentId: Long, updateCommentRequest: UpdateCommentRequest, email: String): String {
-
-        val member = memberService.searchEmail(email)
+    @CheckMyComment("수정")
+    fun updateComment(commentId: Long, email: String, updateCommentRequest: UpdateCommentRequest): String {
 
         val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("댓글", commentId.toString())
-
-        if(!validAuthentication.isSame(member, comment)) throw BadRequestException("다른 사람의 댓글은 수정할 수 없습니다")
 
         comment.update(updateCommentRequest)
 
@@ -59,13 +54,10 @@ class CommentService(
     }
 
     @CheckAuthentication(AuthenticationType.ALL)
+    @CheckMyComment("삭제")
     fun deleteComment(commentId: Long, email: String): String {
 
-        val member = memberService.searchEmail(email)
-
         val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("댓글", commentId.toString())
-
-        if(!validAuthentication.isSame(member, comment)) throw BadRequestException("다른 사람의 댓글은 삭제할 수 없습니다")
 
         commentRepository.delete(comment)
 

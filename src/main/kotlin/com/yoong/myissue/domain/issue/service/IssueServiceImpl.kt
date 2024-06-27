@@ -1,7 +1,6 @@
 package com.yoong.myissue.domain.issue.service
 
 import com.yoong.myissue.common.annotationGather.CheckAuthentication
-import com.yoong.myissue.common.annotationGather.CheckDummyTeam
 import com.yoong.myissue.common.annotationGather.CheckMyTeam
 import com.yoong.myissue.common.enumGather.AuthenticationType
 import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
@@ -11,13 +10,10 @@ import com.yoong.myissue.domain.issue.dto.SearchIssueListRequest
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.repository.IssueRepository
 import com.yoong.myissue.domain.member.service.ExternalMemberService
-import com.yoong.myissue.domain.team.repository.TeamRepository
 import com.yoong.myissue.domain.team.service.DUMMY_TEAM
 import com.yoong.myissue.domain.team.service.ExternalTeamService
-import com.yoong.myissue.domain.team.service.TeamService
 import com.yoong.myissue.exception.clazz.DummyTeamException
 import com.yoong.myissue.exception.clazz.ModelNotFoundException
-import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
