@@ -1,5 +1,6 @@
 package com.yoong.myissue.domain.comment.controller
 
+import com.yoong.myissue.common.annotationGather.FailedLogin
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -17,19 +18,17 @@ class CommentController(
     private val commentService: CommentService
 ) {
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_LEADER')")
+    @FailedLogin
     @PostMapping
     fun createComment(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @RequestBody createCommentRequest: CreateCommentRequest
     ): ResponseEntity<String> {
 
-        if(userPrincipal == null) throw NoAuthenticationException()
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(createCommentRequest, userPrincipal.email))
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(createCommentRequest, userPrincipal!!.email))
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_LEADER')")
+    @FailedLogin
     @PutMapping("/{commentId}")
     fun updateComment(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
@@ -37,20 +36,16 @@ class CommentController(
         @RequestBody updateCommentRequest: UpdateCommentRequest
     ): ResponseEntity<String>{
 
-        if(userPrincipal == null) throw NoAuthenticationException()
-
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.updateComment(commentId, updateCommentRequest, userPrincipal.email))
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.updateComment(commentId,userPrincipal!!.email, updateCommentRequest))
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_LEADER')")
+    @FailedLogin
     @DeleteMapping("/{commentId}")
     fun deleteComment(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable commentId: Long,
     ): ResponseEntity<String>{
 
-        if(userPrincipal == null) throw NoAuthenticationException()
-
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.deleteComment(commentId, userPrincipal.email))
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.deleteComment(commentId, userPrincipal!!.email))
     }
 }
