@@ -55,7 +55,6 @@ class IssueServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    @CheckAuthentication(AuthenticationType.ALL)
     @CheckMyTeam
     override fun getIssue(email: String, issueId: Long): IssueResponse {
 
@@ -64,6 +63,7 @@ class IssueServiceImpl(
         return issue.toIssueResponse(true)
     }
 
+    @CheckAuthentication(AuthenticationType.ALL)
     @Transactional(readOnly = true)
     override fun getIssueList(
         email: String,
@@ -88,6 +88,7 @@ class IssueServiceImpl(
 
     }
 
+    @CheckAuthentication(AuthenticationType.ALL)
     @CheckMyTeam
     override fun updateIssue(email: String, issueId: Long, issueUpdateRequest: IssueUpdateRequest): String {
 
@@ -100,6 +101,7 @@ class IssueServiceImpl(
         return "업데이트 가 완료 되었습니다"
     }
 
+    @CheckAuthentication(AuthenticationType.ALL)
     @CheckMyTeam
     override fun deleteIssue(email: String, issueId: Long): String {
 
