@@ -64,6 +64,10 @@ class IssueRepositoryImpl(
         issueJpaRepository.delete(issue)
     }
 
+    override fun deletedIssue() {
+        issueJpaRepository.deletedIssue()
+    }
+
     fun topicToContent(topic: String, content: String): BooleanExpression {
 
         return when(topic){

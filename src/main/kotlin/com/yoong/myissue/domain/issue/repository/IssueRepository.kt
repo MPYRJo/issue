@@ -16,4 +16,6 @@ interface IssueRepository{
     fun findByIdOrNull(id: Long): Issue?
 
     fun delete(issue: Issue)
+
+    fun deletedIssue()
 }
