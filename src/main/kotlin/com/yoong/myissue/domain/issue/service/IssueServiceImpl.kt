@@ -1,5 +1,9 @@
 package com.yoong.myissue.domain.issue.service
 
+import com.yoong.myissue.common.annotationGather.CheckAuthentication
+import com.yoong.myissue.common.annotationGather.CheckDummyTeam
+import com.yoong.myissue.common.annotationGather.CheckMyTeam
+import com.yoong.myissue.common.enumGather.AuthenticationType
 import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
@@ -7,6 +11,11 @@ import com.yoong.myissue.domain.issue.dto.SearchIssueListRequest
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.repository.IssueRepository
 import com.yoong.myissue.domain.member.service.ExternalMemberService
+import com.yoong.myissue.domain.team.repository.TeamRepository
+import com.yoong.myissue.domain.team.service.DUMMY_TEAM
+import com.yoong.myissue.domain.team.service.ExternalTeamService
+import com.yoong.myissue.domain.team.service.TeamService
+import com.yoong.myissue.exception.clazz.DummyTeamException
 import com.yoong.myissue.exception.clazz.ModelNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
@@ -19,13 +28,15 @@ import org.springframework.transaction.annotation.Transactional
 class IssueServiceImpl(
     private val issueRepository: IssueRepository,
     private val memberService: ExternalMemberService,
+    private val teamService: ExternalTeamService
 ): IssueService{
 
-
-    private val log = LoggerFactory.getLogger("테스트 입니다")
+    @CheckAuthentication(AuthenticationType.ALL)
     override fun createIssue(issueCreateRequest: IssueCreateRequest, email: String): String {
 
         val member = memberService.searchEmail(email)
+
+        if(member.getTeam() == teamService.getDummyTeam()) throw DummyTeamException("현재는 팀 소속이 없어서 이슈 작성이 불가능 합니다")
 
 
         issueRepository.save(
@@ -44,18 +55,19 @@ class IssueServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun getIssue(issueId: Long): IssueResponse {
+    @CheckAuthentication(AuthenticationType.ALL)
+    @CheckMyTeam
+    override fun getIssue(email: String, issueId: Long): IssueResponse {
 
         val issue = issueRepository.findByIdOrNull(issueId) ?: throw ModelNotFoundException("이슈", issueId.toString())
 
-        log.info(issue.toString())
         return issue.toIssueResponse(true)
     }
 
     @Transactional(readOnly = true)
     override fun getIssueList(
-        searchIssueListRequest: SearchIssueListRequest,
         email: String,
+        searchIssueListRequest: SearchIssueListRequest,
         pageable: Pageable
     ): Page<IssueResponse> {
 
@@ -69,7 +81,8 @@ class IssueServiceImpl(
 
     }
 
-    override fun updateIssue(issueId: Long, issueUpdateRequest: IssueUpdateRequest): String {
+    @CheckMyTeam
+    override fun updateIssue(email: String, issueId: Long, issueUpdateRequest: IssueUpdateRequest): String {
 
         val issue = issueRepository.findByIdOrNull(issueId) ?: throw ModelNotFoundException("이슈", issueId.toString())
 
@@ -80,7 +93,8 @@ class IssueServiceImpl(
         return "업데이트 가 완료 되었습니다"
     }
 
-    override fun deleteIssue(issueId: Long): String {
+    @CheckMyTeam
+    override fun deleteIssue(email: String, issueId: Long): String {
 
         val issue = issueRepository.findByIdOrNull(issueId) ?: throw ModelNotFoundException("이슈", issueId.toString())
 

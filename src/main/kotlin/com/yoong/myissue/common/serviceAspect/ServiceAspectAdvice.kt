@@ -41,7 +41,7 @@ class ServiceAspectAdvice(
 
         val teamId = joinPoint.args[0] as Long
 
-        if (teamId == DUMMY_TEAM) throw DummyTeamException()
+        if (teamId == DUMMY_TEAM) throw DummyTeamException(null)
     }
 
     @Before("@annotation(com.yoong.myissue.common.annotationGather.LeaderChoosesOtherTeam)")

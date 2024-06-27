@@ -11,15 +11,15 @@ interface IssueService {
 
     fun createIssue(issueCreateRequest: IssueCreateRequest, email: String): String
 
-    fun getIssue(issueId: Long): IssueResponse
+    fun getIssue(email: String, issueId: Long): IssueResponse
 
     fun getIssueList(
-        searchIssueListRequest: SearchIssueListRequest,
         email: String,
+        searchIssueListRequest: SearchIssueListRequest,
         pageable: Pageable
     ): Page<IssueResponse>
 
-    fun updateIssue(issueId: Long, issueUpdateRequest: IssueUpdateRequest): String
+    fun updateIssue(email: String, issueId: Long, issueUpdateRequest: IssueUpdateRequest): String
 
-    fun deleteIssue(issueId: Long): String
+    fun deleteIssue(email: String, issueId: Long): String
 }

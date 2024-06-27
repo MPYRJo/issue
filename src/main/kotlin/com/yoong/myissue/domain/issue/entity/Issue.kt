@@ -88,6 +88,7 @@ class Issue(
 
     fun getCreatedAt() = this.createdAt
     fun getMember() = this.member.getId()
+    fun getTeam() = this.team
 
 
 }

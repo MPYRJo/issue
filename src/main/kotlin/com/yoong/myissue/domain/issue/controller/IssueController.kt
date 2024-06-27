@@ -1,5 +1,6 @@
 package com.yoong.myissue.domain.issue.controller
 
+import com.yoong.myissue.common.annotationGather.FailedLogin
 import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
@@ -26,41 +27,42 @@ class IssueController(
 ) {
 
     @PostMapping
+    @FailedLogin
     fun createIssue(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @Valid @RequestBody issueCreateRequest : IssueCreateRequest,
         bindingResult: BindingResult
     ): ResponseEntity<String> {
 
-        if(userPrincipal == null) throw NoAuthenticationException()
-
         if(bindingResult.hasErrors()) throw IllegalArgumentException(bindingResult.fieldError!!.defaultMessage.toString())
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueCreateRequest, userPrincipal.email))
+        return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueCreateRequest, userPrincipal!!.email))
     }
 
     @GetMapping("/{issueId}")
+    @FailedLogin
     fun getIssue(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable("issueId") issueId: Long,
     ): ResponseEntity<IssueResponse>{
 
-        return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssue(issueId))
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssue(userPrincipal!!.email,issueId))
     }
 
     @GetMapping()
+    @FailedLogin
     fun getIssueList(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @ModelAttribute searchIssueListRequest: SearchIssueListRequest,
     ): ResponseEntity<Page<IssueResponse>>{
-        if(userPrincipal == null) throw InvalidCredentialException("로그인을 해 주세요")
 
         val pageable = PageRequest.of(searchIssueListRequest.page, searchIssueListRequest.pageSize)
 
-        return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssueList(searchIssueListRequest, userPrincipal.email, pageable))
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.getIssueList(userPrincipal!!.email, searchIssueListRequest, pageable))
     }
 
     @PutMapping("/{issueId}")
+    @FailedLogin
     fun updateIssue(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable("issueId") issueId: Long,
@@ -70,15 +72,16 @@ class IssueController(
         if(bindingResult.hasErrors()) throw IllegalArgumentException(bindingResult.fieldError!!.defaultMessage.toString())
 
 
-        return ResponseEntity.status(HttpStatus.OK).body(issueService.updateIssue(issueId, issueUpdateRequest))
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.updateIssue(userPrincipal!!.email, issueId, issueUpdateRequest))
     }
 
     @DeleteMapping("/{issueId}")
+    @FailedLogin
     fun deleteIssue(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable("issueId") issueId: Long,
     ): ResponseEntity<String>{
 
-        return ResponseEntity.status(HttpStatus.OK).body(issueService.deleteIssue(issueId))
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.deleteIssue(userPrincipal!!.email, issueId))
     }
 }
