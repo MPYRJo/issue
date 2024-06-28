@@ -13,7 +13,8 @@ CREATE TABLE issue (
     priority pr NOT NULL,
     working_status ws NOT NULL,
     member_id BIGINT NOT NULL,
-    team_id BIGINT NOT NULL
+    team_id BIGINT NOT NULL,
+    image_url TEXT
 );
 
 CREATE TABLE member (

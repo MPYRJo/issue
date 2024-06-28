@@ -28,11 +28,7 @@ class ServiceAspectAdvice(
 
     @Before("@annotation(com.yoong.myissue.common.annotationGather.CheckAuthentication)")
     fun checkAuthentication(joinPoint: JoinPoint) {
-        val methodSignature = joinPoint.signature as MethodSignature
-        val method = methodSignature.method
-        val annotation = method.getAnnotation(CheckAuthentication::class.java)
 
-        val authenticationType = annotation.authenticationType
 
         val member = memberService.searchEmail(joinPoint.args[0].toString())
 
