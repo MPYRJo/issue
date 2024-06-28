@@ -41,3 +41,8 @@ out/
 
 # Ignore all .yml files
 *.yml
+
+
+*.env
+
+.env
