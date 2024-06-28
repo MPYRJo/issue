@@ -14,6 +14,7 @@ data class IssueCreateRequest(
     var description: String?,
 
     var priority: Priority,
+
     var workingStatus: WorkingStatus,
 )
 

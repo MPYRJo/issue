@@ -48,6 +48,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("com.querydsl:querydsl-jpa:$queryDslVersion:jakarta")
     kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
+    implementation("io.awspring.cloud:spring-cloud-starter-aws:2.4.4")
+
 
 
     runtimeOnly("org.postgresql:postgresql")
