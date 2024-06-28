@@ -24,11 +24,11 @@ import org.springframework.transaction.annotation.Transactional
 class IssueServiceImpl(
     private val issueRepository: IssueRepository,
     private val memberService: ExternalMemberService,
-    private val teamService: ExternalTeamService
+    private val teamService: ExternalTeamService,
 ): IssueService{
 
     @CheckAuthentication(AuthenticationType.ALL)
-    override fun createIssue(email: String, issueCreateRequest: IssueCreateRequest): String {
+    override fun createIssue(email: String, issueCreateRequest: IssueCreateRequest, imageUrl: String?): String {
 
         val member = memberService.searchEmail(email)
 
@@ -43,9 +43,11 @@ class IssueServiceImpl(
                 workingStatus = issueCreateRequest.workingStatus,
                 member = member,
                 team = member.getTeam(),
-                comment = listOf()
+                comment = listOf(),
+                imageUrl = imageUrl,
             )
         )
+
 
         return "이슈가 등록 되었습니다 이슈 이름 : ${issueCreateRequest.title}"
     }
@@ -92,7 +94,7 @@ class IssueServiceImpl(
 
     @CheckAuthentication(AuthenticationType.ALL)
     @CheckMyTeam
-    override fun updateIssue(email: String, issueId: Long, issueUpdateRequest: IssueUpdateRequest): String {
+    override fun updateIssue(email: String, issueId: Long, issueUpdateRequest: IssueUpdateRequest, imageUrl: String?): String {
 
         val issue = issueRepository.findByIdOrNull(issueId) ?: throw ModelNotFoundException("이슈", issueId.toString())
 

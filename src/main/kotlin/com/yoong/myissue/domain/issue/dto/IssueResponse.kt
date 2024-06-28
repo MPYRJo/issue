@@ -14,5 +14,6 @@ data class IssueResponse (
     val nickname: String,
     val teamName : String,
     val createdAt: LocalDateTime,
-    val comment: List<CommentResponse>
+    val comment: List<CommentResponse>,
+    val imageUrl : String?,
 )

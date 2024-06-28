@@ -46,7 +46,10 @@ class Issue(
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "issue_id")
-    private val comment: List<Comment>
+    private val comment: List<Comment>,
+
+    @Column(name="image_url", nullable = true, columnDefinition = "TEXT")
+    private var imageUrl: String? = null
 
     ) {
     @Id
@@ -64,14 +67,17 @@ class Issue(
     @Column(name="deleted_at", nullable = true, unique = false)
     private var deletedAt: LocalDateTime? = null
 
+
+
     fun update(issueUpdateRequest: IssueUpdateRequest){
         this.title = if(issueUpdateRequest.title == "") this.title else issueUpdateRequest.title?: this.title
         this.description = if(issueUpdateRequest.description == "") this.title else issueUpdateRequest.description ?: this.description
         this.priority = issueUpdateRequest.priority
         this.workingStatus = issueUpdateRequest.workingStatus
+        this.imageUrl = issueUpdateRequest.imageUrl
     }
 
-    fun toIssueResponse(isComment: Boolean): IssueResponse {
+    fun toIssueResponse(isDetailContent: Boolean): IssueResponse {
         return IssueResponse(
             id = id!!,
             title = title,
@@ -81,7 +87,8 @@ class Issue(
             nickname = member.getNickname(),
             teamName = team.getTeamName(),
             createdAt = createdAt,
-            comment = if(isComment) comment.map { it.toCommentResponse() } else emptyList(),
+            comment = if(isDetailContent) comment.map { it.toCommentResponse() } else emptyList(),
+            imageUrl = if(isDetailContent) imageUrl?:"" else ""
         )
     }
 

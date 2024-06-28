@@ -15,5 +15,6 @@ data class IssueUpdateRequest (
     var description: String? = "",
     var priority: Priority = Priority.NORMAL,
     var workingStatus: WorkingStatus = WorkingStatus.TODO,
+    var imageUrl: String? = null,
 
 )

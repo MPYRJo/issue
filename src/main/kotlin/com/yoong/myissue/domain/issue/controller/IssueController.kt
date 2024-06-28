@@ -9,6 +9,7 @@ import com.yoong.myissue.domain.issue.service.IssueServiceImpl
 import com.yoong.myissue.exception.clazz.IllegalArgumentException
 import com.yoong.myissue.exception.clazz.InvalidCredentialException
 import com.yoong.myissue.exception.clazz.NoAuthenticationException
+import com.yoong.myissue.infra.s3.S3Manager
 import com.yoong.myissue.infra.security.config.UserPrincipal
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
@@ -20,25 +21,32 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 
 @RestController
 @RequestMapping("/api/v1/issues")
 class IssueController(
-    private val issueService: IssueServiceImpl
+    private val issueService: IssueServiceImpl,
+    private val s3Manager: S3Manager
 ) {
 
     @PostMapping
     @FailedLogin
     fun createIssue(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
-        @Valid @RequestBody issueCreateRequest : IssueCreateRequest,
+        @Valid @RequestPart issueCreateRequest : IssueCreateRequest,
+        @RequestPart image: MultipartFile,
         bindingResult: BindingResult
     ): ResponseEntity<String> {
 
         if(bindingResult.hasErrors()) throw IllegalArgumentException(bindingResult.fieldError!!.defaultMessage.toString())
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(userPrincipal!!.email, issueCreateRequest))
+        val uploadImage = s3Manager.uploadImage(image)
+        val imageUrl = s3Manager.getFile(uploadImage)
+        println()
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(userPrincipal!!.email, issueCreateRequest, imageUrl))
     }
 
     @GetMapping("/{issueId}")
@@ -84,12 +92,16 @@ class IssueController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal?,
         @PathVariable("issueId") issueId: Long,
         @Valid @RequestBody issueUpdateRequest : IssueUpdateRequest,
+        @RequestPart image: MultipartFile,
         bindingResult: BindingResult
     ): ResponseEntity<String>{
         if(bindingResult.hasErrors()) throw IllegalArgumentException(bindingResult.fieldError!!.defaultMessage.toString())
 
+        val uploadImage = s3Manager.uploadImage(image)
+        val imageUrl = s3Manager.getFile(uploadImage)
 
-        return ResponseEntity.status(HttpStatus.OK).body(issueService.updateIssue(userPrincipal!!.email, issueId, issueUpdateRequest))
+
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.updateIssue(userPrincipal!!.email, issueId, issueUpdateRequest, imageUrl))
     }
 
     @DeleteMapping("/{issueId}")
