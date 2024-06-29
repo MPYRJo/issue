@@ -6,15 +6,16 @@ import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.EntityPathBase
 import com.querydsl.core.types.dsl.PathBuilder
-import com.querydsl.jpa.impl.JPAQueryFactory
 import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.entity.QIssue
 import com.yoong.myissue.domain.issue.enumGather.Priority
 import com.yoong.myissue.domain.issue.enumGather.WorkingStatus
+import com.yoong.myissue.domain.issue.repository.IssueJpaRepository
+import com.yoong.myissue.domain.issue.repository.IssueRepository
+import com.yoong.myissue.domain.team.entity.QTeam.team
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.exception.clazz.IllegalArgumentException
-import jakarta.persistence.EntityManager
-import jakarta.persistence.PersistenceContext
+import com.yoong.myissue.infra.querydsl.QueryDslSupport
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -23,16 +24,11 @@ import org.springframework.stereotype.Repository
 @Repository
 class IssueRepositoryImpl(
     val issueJpaRepository: IssueJpaRepository,
-    @PersistenceContext
-    private val em: EntityManager,
-): IssueRepository {
+): QueryDslSupport(){
 
     private val issue = QIssue.issue
 
-    private val queryFactory: JPAQueryFactory = JPAQueryFactory(em)
-
-
-    override fun findAllIssueList(topic: String, content: String, asc: Boolean, orderBy: String, team: Team, pageable: Pageable): Page<Issue> {
+    fun findAll(topic: String, content: String, asc: Boolean, orderBy: String, pageable: Pageable): Page<Issue> {
 
         val query = queryFactory
             .selectFrom(issue)
@@ -51,23 +47,23 @@ class IssueRepositoryImpl(
         return PageImpl(query, pageable, totalSize.toLong())
     }
 
-    override fun save(issue: Issue): Issue {
+    fun save(issue: Issue): Issue {
         return issueJpaRepository.save(issue)
     }
 
-    override fun findByIdOrNull(id: Long): Issue? {
+    fun findByIdOrNull(id: Long): Issue? {
         return issueJpaRepository.findByIdAndDeletedAtIsNull(id)
     }
 
-    override fun delete(issue: Issue) {
+    fun delete(issue: Issue) {
         issueJpaRepository.delete(issue)
     }
 
-    override fun deletedIssue() {
+    fun deletedIssue() {
         issueJpaRepository.deletedIssue()
     }
 
-    override fun findAllDeleted(pageable: Pageable): Page<Issue> {
+    fun findAllDeleted(pageable: Pageable): Page<Issue> {
         val query = queryFactory
             .selectFrom(issue)
             .where(issue.deletedAt.isNotNull)

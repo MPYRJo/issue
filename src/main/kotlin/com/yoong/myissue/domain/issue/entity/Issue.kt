@@ -96,5 +96,4 @@ class Issue(
     fun getMember() = this.member.getId()
     fun getTeam() = this.team
 
-
 }
