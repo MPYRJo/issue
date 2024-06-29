@@ -1,6 +1,5 @@
 package com.yoong.myissue.infra.schedulier
 
-import com.yoong.myissue.domain.issue.repository.IssueRepository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 

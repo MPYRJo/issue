@@ -20,8 +20,8 @@ import org.springframework.test.context.ActiveProfiles
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
 //@Import(value = [QueryDslSupport::class])
-class IssueJpaRepositoryImplTest @Autowired constructor(
-    val issueRepository: IssueJpaRepository,
+class QueryDslIssueRepositoryTest @Autowired constructor(
+    val issueRepository: IssueRepository,
 ) {
 
 

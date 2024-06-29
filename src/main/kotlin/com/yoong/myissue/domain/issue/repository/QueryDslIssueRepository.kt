@@ -10,9 +10,6 @@ import com.yoong.myissue.domain.issue.entity.Issue
 import com.yoong.myissue.domain.issue.entity.QIssue
 import com.yoong.myissue.domain.issue.enumGather.Priority
 import com.yoong.myissue.domain.issue.enumGather.WorkingStatus
-import com.yoong.myissue.domain.issue.repository.IssueJpaRepository
-import com.yoong.myissue.domain.issue.repository.IssueRepository
-import com.yoong.myissue.domain.team.entity.QTeam.team
 import com.yoong.myissue.domain.team.entity.Team
 import com.yoong.myissue.exception.clazz.IllegalArgumentException
 import com.yoong.myissue.infra.querydsl.QueryDslSupport
@@ -22,13 +19,11 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 
 @Repository
-class IssueRepositoryImpl(
-    val issueJpaRepository: IssueJpaRepository,
-): QueryDslSupport(){
+class QueryDslIssueRepository(): QueryDslSupport(){
 
     private val issue = QIssue.issue
 
-    fun findAll(topic: String, content: String, asc: Boolean, orderBy: String, pageable: Pageable): Page<Issue> {
+    fun findAllIssueList(topic: String, content: String, asc: Boolean, orderBy: String, team: Team, pageable: Pageable): Page<Issue> {
 
         val query = queryFactory
             .selectFrom(issue)
@@ -45,33 +40,6 @@ class IssueRepositoryImpl(
 
 
         return PageImpl(query, pageable, totalSize.toLong())
-    }
-
-    fun save(issue: Issue): Issue {
-        return issueJpaRepository.save(issue)
-    }
-
-    fun findByIdOrNull(id: Long): Issue? {
-        return issueJpaRepository.findByIdAndDeletedAtIsNull(id)
-    }
-
-    fun delete(issue: Issue) {
-        issueJpaRepository.delete(issue)
-    }
-
-    fun deletedIssue() {
-        issueJpaRepository.deletedIssue()
-    }
-
-    fun findAllDeleted(pageable: Pageable): Page<Issue> {
-        val query = queryFactory
-            .selectFrom(issue)
-            .where(issue.deletedAt.isNotNull)
-            .fetch()
-
-        val totalSize = query.size.toLong()
-
-        return PageImpl(query, pageable, totalSize)
     }
 
     private fun topicToContent(topic: String, content: String): BooleanExpression {

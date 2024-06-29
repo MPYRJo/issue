@@ -5,16 +5,13 @@ import com.yoong.myissue.domain.issue.dto.IssueCreateRequest
 import com.yoong.myissue.domain.issue.dto.IssueResponse
 import com.yoong.myissue.domain.issue.dto.IssueUpdateRequest
 import com.yoong.myissue.domain.issue.dto.SearchIssueListRequest
-import com.yoong.myissue.domain.issue.service.IssueServiceImpl
+import com.yoong.myissue.domain.issue.service.IssueService
 import com.yoong.myissue.exception.clazz.IllegalArgumentException
-import com.yoong.myissue.exception.clazz.InvalidCredentialException
-import com.yoong.myissue.exception.clazz.NoAuthenticationException
 import com.yoong.myissue.infra.s3.S3Manager
 import com.yoong.myissue.infra.security.config.UserPrincipal
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -27,9 +24,10 @@ import org.springframework.web.multipart.MultipartFile
 @RestController
 @RequestMapping("/api/v1/issues")
 class IssueController(
-    private val issueService: IssueServiceImpl,
-    private val s3Manager: S3Manager
+    private val issueService: IssueService,
+    private val s3Manager: S3Manager,
 ) {
+
 
     @PostMapping
     @FailedLogin

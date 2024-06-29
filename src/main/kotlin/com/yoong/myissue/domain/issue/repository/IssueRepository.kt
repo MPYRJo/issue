@@ -1,23 +1,19 @@
 package com.yoong.myissue.domain.issue.repository
 
 import com.yoong.myissue.domain.issue.entity.Issue
-import com.yoong.myissue.domain.team.entity.Team
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
-import org.springframework.stereotype.Repository
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
+import org.springframework.data.jpa.repository.Query
+import org.springframework.transaction.annotation.Transactional
 
-@Repository
-interface IssueRepository{
+interface IssueRepository: JpaRepository<Issue, Long> {
 
-    fun findAllIssueList(topic: String, content: String, asc: Boolean, orderBy: String, team: Team, pageable: Pageable): Page<Issue>
+    fun findByIdAndDeletedAtIsNull(id: Long): Issue?
 
-    fun save(issue: Issue): Issue
-
-    fun findByIdOrNull(id: Long): Issue?
-
-    fun delete(issue: Issue)
-
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM issue WHERE deleted_at <= NOW() - INTERVAL '90' day ", nativeQuery = true)
     fun deletedIssue()
 
-    fun findAllDeleted(pageable: Pageable): Page<Issue>
+    fun findByIdOrNull(issueId: Long): Issue?
 }
