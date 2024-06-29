@@ -1,22 +1,5 @@
 package com.yoong.myissue.domain.member.service
 
-import com.yoong.myissue.domain.issue.enumGather.Role
-import com.yoong.myissue.common.clazz.PasswordManagement
-import com.yoong.myissue.domain.member.dto.SignupRequest
-import com.yoong.myissue.domain.member.entity.Member
-import com.yoong.myissue.domain.member.repository.MemberJpaRepository
-import com.yoong.myissue.domain.team.entity.Team
-import com.yoong.myissue.domain.team.repository.TeamJpaRepository
-import com.yoong.myissue.domain.team.service.ExternalTeamService
-import com.yoong.myissue.domain.team.service.TeamServiceImpl
-import com.yoong.myissue.infra.security.jwt.JwtPlugin
-import com.yoong.myissue.infra.security.jwt.PasswordEncoder
-import io.kotest.matchers.shouldBe
-import io.mockk.every
-import io.mockk.mockk
-import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
-
 class MemberServiceImplTest {
 
 

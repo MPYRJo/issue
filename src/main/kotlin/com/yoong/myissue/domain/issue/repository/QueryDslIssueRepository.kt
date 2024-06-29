@@ -42,6 +42,17 @@ class QueryDslIssueRepository(): QueryDslSupport(){
         return PageImpl(query, pageable, totalSize.toLong())
     }
 
+    fun findAllDeleted(pageable: Pageable): Page<Issue> {
+        val query = queryFactory
+            .selectFrom(issue)
+            .where(issue.deletedAt.isNotNull)
+            .fetch()
+
+        val totalSize = query.size.toLong()
+
+        return PageImpl(query, pageable, totalSize)
+    }
+
     private fun topicToContent(topic: String, content: String): BooleanExpression {
 
         return when(topic){

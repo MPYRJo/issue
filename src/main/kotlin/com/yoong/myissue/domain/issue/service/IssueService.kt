@@ -104,7 +104,7 @@ class IssueService(
 
         validAuthentication.role(member.getRole(), AuthenticationType.ADMIN)
 
-        return issueRepository.findAllDeleted(pageable).map { it.toIssueResponse(false) }
+        return queryDslIssueRepository.findAllDeleted(pageable).map { it.toIssueResponse(false) }
     }
 
     fun updateIssue(email: String, issueId: Long, issueUpdateRequest: IssueUpdateRequest, imageUrl: String?): String {
