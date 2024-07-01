@@ -57,17 +57,5 @@ class ServiceAspectAdviceTest {
 
     }
 
-    @Test
-    fun `checkDummyTeam 에서 팀 아이디가 DummyTeam과 같을 경우 DummyTeamException 애러 확인`(){
 
-        val team = Team(
-            name = "test",
-            issues = listOf(),
-            members = listOf()
-        )
-
-        every { teamService. }
-
-
-    }
 }

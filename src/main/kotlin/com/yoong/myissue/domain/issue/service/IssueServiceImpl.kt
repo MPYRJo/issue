@@ -69,7 +69,7 @@ class IssueServiceImpl(
         pageable: Pageable
     ): Page<IssueResponse> {
 
-        val teamId = memberService.searchEmail(email).getTeam().getId()!!
+        val teamId = memberService.searchEmail(email).getTeam().getId()?:2L
 
         if(teamId == DUMMY_TEAM) throw DummyTeamException("임시 팀 맴버는 이슈를 볼 수 없습니다")
 

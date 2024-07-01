@@ -49,12 +49,14 @@ class Issue(
     private val comment: List<Comment>,
 
     @Column(name="image_url", nullable = true, columnDefinition = "TEXT")
-    private var imageUrl: String? = null
+    private var imageUrl: String? = null,
 
-    ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private val id : Long? = null
+
+    ) {
+
 
     @Column(name="created_at", nullable = false, unique = false)
     @CreationTimestamp
@@ -92,6 +94,8 @@ class Issue(
         )
     }
 
+    fun getTitle() = this.title
+    fun getDescription() = this.description
     fun getCreatedAt() = this.createdAt
     fun getMember() = this.member.getId()
     fun getTeam() = this.team
